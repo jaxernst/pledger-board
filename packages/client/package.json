@@ -1,0 +1,46 @@
+{
+  "name": "client",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "wait-port localhost:8545 && vite",
+    "initialize": "pnpm build",
+    "preview": "vite preview",
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ethersproject/providers": "^5.7.2",
+    "@latticexyz/common": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/dev-tools": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/network": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/recs": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/schema-type": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/std-client": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/utils": "2.0.0-alpha.1.164+6d93e41f",
+    "@latticexyz/world": "2.0.0-alpha.1.164+6d93e41f",
+    "@wagmi/chains": "^0.2.22",
+    "contracts": "workspace:*",
+    "ethers": "^5.7.2"
+  },
+  "devDependencies": {
+    "wait-port": "^1.0.4",
+    "@sveltejs/vite-plugin-svelte": "^2.0.2",
+    "@tsconfig/svelte": "^3.0.0",
+    "@zerodevx/svelte-toast": "^0.9.3",
+    "autoprefixer": "^10.4.14",
+    "postcss": "latest",
+    "prettier": "^2.8.8",
+    "prettier-plugin-svelte": "^2.10.0",
+    "prettier-plugin-tailwindcss": "^0.2.8",
+    "svelte": "^3.58.0",
+    "svelte-check": "^2.10.3",
+    "svelte-preprocess": "latest",
+    "tailwindcss": "latest",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}
