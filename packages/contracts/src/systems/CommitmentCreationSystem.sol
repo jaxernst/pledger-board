@@ -8,14 +8,8 @@ import { CommitmentDescriptor } from "../codegen/Tables.sol";
 import { Commitment } from "../codegen/Tables.sol";
 
 contract CommitmentCreationSystem is System {
-  function createCommitmentEntity() public returns (bytes32) {
-    bytes32 entity = getUniqueEntity();
-    Commitment.set(entity, true);
-    return entity;
-  }
-
-  function addDescription(bytes32 entity, string memory desc) public returns (bytes32) {
-    CommitmentDescriptor.set(entity, desc);
+  function addDescription(uint32 entity, string memory desc) public returns (uint32) {
+    CommitmentDescriptor.set(bytes32(uint256(entity)), desc);
     return entity;
   }
 
