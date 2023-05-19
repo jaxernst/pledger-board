@@ -7,13 +7,12 @@ export default mudConfig({
       schema: "uint32",
     },
     Commitment: "bool",
-    Pledge: "bool",
-    CommitmentDescriptor: {
-      keySchema: {
-        // These commitment that this describes
-        commitment: "bytes32",
-      },
+    Description: {
       schema: "string",
     },
+    Deadline: {
+      schema: "uint32",
+    },
+    Active: "bool",
   },
 });

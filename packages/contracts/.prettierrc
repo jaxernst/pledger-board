@@ -1,5 +1,5 @@
 {
-  "plugins": ["prettier-plugin-solidity", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
+  "plugins": ["prettier-plugin-solidity"],
   "printWidth": 120,
   "semi": true,
   "tabWidth": 2,

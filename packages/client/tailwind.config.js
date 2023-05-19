@@ -1,5 +1,7 @@
 export default {
-  purge: ["./src/**/*.svelte", "./src/**/*.html"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
   theme: {},
   variants: {},
   plugins: [],
