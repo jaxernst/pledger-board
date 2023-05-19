@@ -75,7 +75,7 @@ type SubmitButtonProps = {
 
 export function SubmitButton({ children, onSubmit }: SubmitButtonProps) {
   return (
-    <button onClick={onSubmit} className="rounded-xl mt-3 p-3 bg-slate-500 text-white w-min">
+    <button onClick={onSubmit} className="rounded-xl p-2 border-2 border-cyan-200  shadow-lg w-full text-center text-white bg-violet-700">
       {children}
     </button>
   );

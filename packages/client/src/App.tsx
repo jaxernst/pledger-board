@@ -45,6 +45,7 @@ export const App = () => {
           </AutoRow>
         </AutoColumn>
 
+        <div className=" h-10" />
         <SubmitButton onSubmit={() => createCommitment(description)}>Generate Commitment</SubmitButton>
       </CenteredInPage>
     </div>
