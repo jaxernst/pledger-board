@@ -5,5 +5,6 @@ pragma solidity >=0.8.0;
 
 import { Counter, CounterTableId } from "./tables/Counter.sol";
 import { Commitment, CommitmentTableId } from "./tables/Commitment.sol";
-import { Pledge, PledgeTableId } from "./tables/Pledge.sol";
-import { CommitmentDescriptor, CommitmentDescriptorTableId } from "./tables/CommitmentDescriptor.sol";
+import { Description, DescriptionTableId } from "./tables/Description.sol";
+import { Deadline, DeadlineTableId } from "./tables/Deadline.sol";
+import { Active, ActiveTableId } from "./tables/Active.sol";

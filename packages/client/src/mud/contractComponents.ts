@@ -35,12 +35,12 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    Pledge: (() => {
-      const tableId = new TableId("", "Pledge");
+    Description: (() => {
+      const tableId = new TableId("", "Description");
       return defineComponent(
         world,
         {
-          value: RecsType.Boolean,
+          value: RecsType.String,
         },
         {
           metadata: {
@@ -50,12 +50,27 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    CommitmentDescriptor: (() => {
-      const tableId = new TableId("", "CommitmentDescri");
+    Deadline: (() => {
+      const tableId = new TableId("", "Deadline");
       return defineComponent(
         world,
         {
-          value: RecsType.String,
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    Active: (() => {
+      const tableId = new TableId("", "Active");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Boolean,
         },
         {
           metadata: {
