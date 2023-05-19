@@ -5,12 +5,14 @@ import { defineComponent, Type as RecsType, World } from "@latticexyz/recs";
 
 export function defineContractComponents(world: World) {
   return {
-    Counter: (() => {
-      const tableId = new TableId("", "Counter");
+    Commitment: (() => {
+      const tableId = new TableId("", "Commitment");
       return defineComponent(
         world,
         {
-          value: RecsType.Number,
+          owner: RecsType.String,
+          creationTimestamp: RecsType.BigInt,
+          status: RecsType.Number,
         },
         {
           metadata: {
@@ -20,8 +22,8 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    Commitment: (() => {
-      const tableId = new TableId("", "Commitment");
+    FirstCommitment: (() => {
+      const tableId = new TableId("", "FirstCommitment");
       return defineComponent(
         world,
         {
@@ -65,12 +67,42 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    Active: (() => {
-      const tableId = new TableId("", "Active");
+    ProofRequirement: (() => {
+      const tableId = new TableId("", "ProofRequirement");
       return defineComponent(
         world,
         {
-          value: RecsType.Boolean,
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    SupportTokens: (() => {
+      const tableId = new TableId("", "SupportTokens");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    AttestationTokens: (() => {
+      const tableId = new TableId("", "AttestationToken");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Number,
         },
         {
           metadata: {

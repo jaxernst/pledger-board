@@ -1,29 +1,45 @@
-import { createEntity, getComponentValue } from "@latticexyz/recs";
+import {
+  Entity,
+  Has,
+  createEntity,
+  getComponentValue,
+  runQuery,
+} from "@latticexyz/recs";
 import { awaitStreamValue, stringToBytes32 } from "@latticexyz/utils";
 import { ClientComponents } from "./createClientComponents";
 import { SetupNetworkResult } from "./setupNetwork";
+import { IWorld } from "contracts/types/ethers-contracts/IWorld";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
   { worldSend, txReduced$, singletonEntity, world }: SetupNetworkResult,
-  { Counter, Commitment }: ClientComponents
+  { Commitment }: ClientComponents
 ) {
-  const increment = async () => {
-    const tx = await worldSend("increment", []);
-    
-    await awaitStreamValue(txReduced$, (txHash) => txHash === tx.hash);
-    return getComponentValue(Counter, singletonEntity);
+  const createCommitment = async (
+    description: string,
+    adons?: [keyof IWorld, Parameters<typeof worldSend>][]
+  ) => {
+    const id = createEntity(world, [[Commitment, { value: true }]]);
+    await worldSend("createCommitment", [stringToBytes32(id)]);
+    await worldSend("addDescription", [stringToBytes32(id), description]);
+    console.log("created commitment with id", id);
+
+    for (const adon of adons ?? []) {
+      await worldSend(...adon);
+    }
+
+    return id;
   };
 
-  const createCommitment = async (description: string) => {
-    const id = createEntity(world, [[Commitment, { value: true }]])
-    console.log("created commitment with id", id)
-    await worldSend("addDescription", [stringToBytes32(id), description]);
-  }
+  const markComplete = async (id: Entity) => {
+    console.log("marking complete", id);
+    // TODO: Check that proof does not require photo and that the proof is active
+    await worldSend("markComplete", [id]);
+  };
 
   return {
-    increment,
     createCommitment,
+    markComplete,
   };
 }

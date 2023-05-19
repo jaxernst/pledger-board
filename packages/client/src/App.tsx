@@ -1,53 +1,32 @@
-import { useComponentValue } from "@latticexyz/react";
+import { useEntityQuery } from "@latticexyz/react";
+import { CenteredInPage } from "./components/Util";
+import { WelcomeMessage } from "./components/WelcomeMessage";
+import { Has } from "@latticexyz/recs";
 import { useMUD } from "./MUDContext";
-import { AutoColumn, AutoRow, CenteredInPage, DescriptionInput, SubmitButton } from "./UtilityComponents";
-import { WelcomeMessage } from "./WelcomeMessage";
-import { useState } from "react";
-
+import { CommitmentBuilder } from "./components/CommitmentBuilder";
+import { CommitmentCard } from "./components/CommitmentCard";
+import { Hud } from "./components/Hud";
 
 export const App = () => {
-
   const {
-    components: { Counter, Commitment },
-    systemCalls: { increment, createCommitment },
-    network: { singletonEntity },
+    components: { Commitment, Description },
   } = useMUD();
 
+  const commitmentIds = useEntityQuery([Has(Commitment), Has(Description)]);
 
-  const [description, setDescription] = useState("I commit to...")
-
-  
-
-  return (<>
-    <div className="background h-full bg-slate-300">
+  return (
+    <>
+      <Hud />
       <CenteredInPage>
         <WelcomeMessage />
-        <DescriptionInput onInput={(v: string) => setDescription(v)}/>
-    
-        <AutoColumn>
-          <AutoRow label="Add Verification Method">
-            <AutoRow.Item>Add deadline</AutoRow.Item>
-            <AutoRow.Item>Add alarm schedule</AutoRow.Item>
-            <AutoRow.Item>Add interval schedule</AutoRow.Item>
-          </AutoRow>
-
-          <AutoRow label="Add confirmation artifacts">
-            <AutoRow.Item>No proof</AutoRow.Item>
-            <AutoRow.Item>Photo proof</AutoRow.Item>
-            <AutoRow.Item>Zk proof</AutoRow.Item>
-          </AutoRow>
-
-          <AutoRow label="Add Verification Method">
-            <AutoRow.Item>Self attestation</AutoRow.Item>
-            <AutoRow.Item>Partner Attestation</AutoRow.Item>
-            <AutoRow.Item>Community Attestation</AutoRow.Item>
-            <AutoRow.Item>External Attestation</AutoRow.Item>
-          </AutoRow>
-        </AutoColumn>
-
-        <div className=" h-10" />
-        <SubmitButton onSubmit={() => createCommitment(description)}>Generate Commitment</SubmitButton>
+        <CommitmentBuilder />
+        <h2 className="mt-5 text-lg font-bold">Onchain Commitments</h2>
+        <div className="flex flex-wrap gap-2">
+          {commitmentIds.map((id) => (
+            <CommitmentCard key={id} id={id} />
+          ))}
+        </div>
       </CenteredInPage>
-    </div>
-</>)
-}
+    </>
+  );
+};
