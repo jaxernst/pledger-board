@@ -25,7 +25,7 @@ bytes32 constant CommitmentTableId = _tableId;
 
 struct CommitmentData {
   address owner;
-  uint256 creationTimestamp;
+  uint256 activationTimestamp;
   CommitmentStatus status;
 }
 
@@ -51,7 +51,7 @@ library Commitment {
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](3);
     _fieldNames[0] = "owner";
-    _fieldNames[1] = "creationTimestamp";
+    _fieldNames[1] = "activationTimestamp";
     _fieldNames[2] = "status";
     return ("Commitment", _fieldNames);
   }
@@ -112,8 +112,8 @@ library Commitment {
     _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((owner)));
   }
 
-  /** Get creationTimestamp */
-  function getCreationTimestamp(bytes32 key) internal view returns (uint256 creationTimestamp) {
+  /** Get activationTimestamp */
+  function getActivationTimestamp(bytes32 key) internal view returns (uint256 activationTimestamp) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -121,8 +121,8 @@ library Commitment {
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
-  /** Get creationTimestamp (using the specified store) */
-  function getCreationTimestamp(IStore _store, bytes32 key) internal view returns (uint256 creationTimestamp) {
+  /** Get activationTimestamp (using the specified store) */
+  function getActivationTimestamp(IStore _store, bytes32 key) internal view returns (uint256 activationTimestamp) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
@@ -130,20 +130,20 @@ library Commitment {
     return (uint256(Bytes.slice32(_blob, 0)));
   }
 
-  /** Set creationTimestamp */
-  function setCreationTimestamp(bytes32 key, uint256 creationTimestamp) internal {
+  /** Set activationTimestamp */
+  function setActivationTimestamp(bytes32 key, uint256 activationTimestamp) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((creationTimestamp)));
+    StoreSwitch.setField(_tableId, _keyTuple, 1, abi.encodePacked((activationTimestamp)));
   }
 
-  /** Set creationTimestamp (using the specified store) */
-  function setCreationTimestamp(IStore _store, bytes32 key, uint256 creationTimestamp) internal {
+  /** Set activationTimestamp (using the specified store) */
+  function setActivationTimestamp(IStore _store, bytes32 key, uint256 activationTimestamp) internal {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((creationTimestamp)));
+    _store.setField(_tableId, _keyTuple, 1, abi.encodePacked((activationTimestamp)));
   }
 
   /** Get status */
@@ -199,8 +199,8 @@ library Commitment {
   }
 
   /** Set the full data using individual values */
-  function set(bytes32 key, address owner, uint256 creationTimestamp, CommitmentStatus status) internal {
-    bytes memory _data = encode(owner, creationTimestamp, status);
+  function set(bytes32 key, address owner, uint256 activationTimestamp, CommitmentStatus status) internal {
+    bytes memory _data = encode(owner, activationTimestamp, status);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -209,8 +209,14 @@ library Commitment {
   }
 
   /** Set the full data using individual values (using the specified store) */
-  function set(IStore _store, bytes32 key, address owner, uint256 creationTimestamp, CommitmentStatus status) internal {
-    bytes memory _data = encode(owner, creationTimestamp, status);
+  function set(
+    IStore _store,
+    bytes32 key,
+    address owner,
+    uint256 activationTimestamp,
+    CommitmentStatus status
+  ) internal {
+    bytes memory _data = encode(owner, activationTimestamp, status);
 
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
@@ -220,19 +226,19 @@ library Commitment {
 
   /** Set the full data using the data struct */
   function set(bytes32 key, CommitmentData memory _table) internal {
-    set(key, _table.owner, _table.creationTimestamp, _table.status);
+    set(key, _table.owner, _table.activationTimestamp, _table.status);
   }
 
   /** Set the full data using the data struct (using the specified store) */
   function set(IStore _store, bytes32 key, CommitmentData memory _table) internal {
-    set(_store, key, _table.owner, _table.creationTimestamp, _table.status);
+    set(_store, key, _table.owner, _table.activationTimestamp, _table.status);
   }
 
   /** Decode the tightly packed blob using this table's schema */
   function decode(bytes memory _blob) internal pure returns (CommitmentData memory _table) {
     _table.owner = (address(Bytes.slice20(_blob, 0)));
 
-    _table.creationTimestamp = (uint256(Bytes.slice32(_blob, 20)));
+    _table.activationTimestamp = (uint256(Bytes.slice32(_blob, 20)));
 
     _table.status = CommitmentStatus(uint8(Bytes.slice1(_blob, 52)));
   }
@@ -240,10 +246,10 @@ library Commitment {
   /** Tightly pack full data using this table's schema */
   function encode(
     address owner,
-    uint256 creationTimestamp,
+    uint256 activationTimestamp,
     CommitmentStatus status
   ) internal view returns (bytes memory) {
-    return abi.encodePacked(owner, creationTimestamp, status);
+    return abi.encodePacked(owner, activationTimestamp, status);
   }
 
   /** Encode keys as a bytes32 array using this table's schema */

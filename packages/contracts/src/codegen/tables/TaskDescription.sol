@@ -17,21 +17,21 @@ import { EncodeArray } from "@latticexyz/store/src/tightcoder/EncodeArray.sol";
 import { Schema, SchemaLib } from "@latticexyz/store/src/Schema.sol";
 import { PackedCounter, PackedCounterLib } from "@latticexyz/store/src/PackedCounter.sol";
 
-bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("AttestationToken")));
-bytes32 constant AttestationTokensTableId = _tableId;
+bytes32 constant _tableId = bytes32(abi.encodePacked(bytes16(""), bytes16("TaskDescription")));
+bytes32 constant TaskDescriptionTableId = _tableId;
 
-library AttestationTokens {
+library TaskDescription {
   /** Get the table's schema */
   function getSchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.UINT32;
+    _schema[0] = SchemaType.STRING;
 
     return SchemaLib.encode(_schema);
   }
 
   function getKeySchema() internal pure returns (Schema) {
     SchemaType[] memory _schema = new SchemaType[](1);
-    _schema[0] = SchemaType.ADDRESS;
+    _schema[0] = SchemaType.BYTES32;
 
     return SchemaLib.encode(_schema);
   }
@@ -40,7 +40,7 @@ library AttestationTokens {
   function getMetadata() internal pure returns (string memory, string[] memory) {
     string[] memory _fieldNames = new string[](1);
     _fieldNames[0] = "value";
-    return ("AttestationTokens", _fieldNames);
+    return ("TaskDescription", _fieldNames);
   }
 
   /** Register the table's schema */
@@ -65,64 +65,38 @@ library AttestationTokens {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Get value */
-  function get(address account) internal view returns (uint32 value) {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
+  /** Emit the ephemeral event using individual values */
+  function emitEphemeral(bytes32 key, string memory value) internal {
+    bytes memory _data = encode(value);
 
-    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
-    return (uint32(Bytes.slice4(_blob, 0)));
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.emitEphemeralRecord(_tableId, _keyTuple, _data);
   }
 
-  /** Get value (using the specified store) */
-  function get(IStore _store, address account) internal view returns (uint32 value) {
+  /** Emit the ephemeral event using individual values (using the specified store) */
+  function emitEphemeral(IStore _store, bytes32 key, string memory value) internal {
+    bytes memory _data = encode(value);
+
     bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
+    _keyTuple[0] = bytes32((key));
 
-    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
-    return (uint32(Bytes.slice4(_blob, 0)));
-  }
-
-  /** Set value */
-  function set(address account, uint32 value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
-
-    StoreSwitch.setField(_tableId, _keyTuple, 0, abi.encodePacked((value)));
-  }
-
-  /** Set value (using the specified store) */
-  function set(IStore _store, address account, uint32 value) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
-
-    _store.setField(_tableId, _keyTuple, 0, abi.encodePacked((value)));
+    _store.emitEphemeralRecord(_tableId, _keyTuple, _data);
   }
 
   /** Tightly pack full data using this table's schema */
-  function encode(uint32 value) internal view returns (bytes memory) {
-    return abi.encodePacked(value);
+  function encode(string memory value) internal view returns (bytes memory) {
+    uint40[] memory _counters = new uint40[](1);
+    _counters[0] = uint40(bytes(value).length);
+    PackedCounter _encodedLengths = PackedCounterLib.pack(_counters);
+
+    return abi.encodePacked(_encodedLengths.unwrap(), bytes((value)));
   }
 
   /** Encode keys as a bytes32 array using this table's schema */
-  function encodeKeyTuple(address account) internal pure returns (bytes32[] memory _keyTuple) {
+  function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
-  }
-
-  /* Delete all data for given keys */
-  function deleteRecord(address account) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
-
-    StoreSwitch.deleteRecord(_tableId, _keyTuple);
-  }
-
-  /* Delete all data for given keys (using the specified store) */
-  function deleteRecord(IStore _store, address account) internal {
-    bytes32[] memory _keyTuple = new bytes32[](1);
-    _keyTuple[0] = bytes32(uint256(uint160((account))));
-
-    _store.deleteRecord(_tableId, _keyTuple);
+    _keyTuple[0] = bytes32((key));
   }
 }

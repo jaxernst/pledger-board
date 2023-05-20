@@ -6,5 +6,11 @@ pragma solidity >=0.8.0;
 interface ICommitmentBuilderSystem {
   function createCommitment(bytes32 id) external;
 
-  function addDescription(bytes32 entity, string memory desc) external returns (bytes32);
+  function addDescription(bytes32 id, string memory desc) external;
+
+  function addDeadline(bytes32 id, uint32 deadline) external;
+
+  function addSubmissionArtifacts(bytes32 id, string memory proofDescription, string memory uri) external;
+
+  function activate(bytes32 id) external;
 }

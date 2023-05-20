@@ -4,38 +4,48 @@ pragma solidity >=0.8.0;
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 import { System } from "@latticexyz/world/src/System.sol";
 import { addressToEntity } from "../util/addressToEntity.sol";
-import { Description,  Commitment, CommitmentData, FirstCommitment, SupportTokens, AttestationTokens } from "../codegen/Tables.sol";
+import { TaskDescription,  Commitment, CommitmentData, ProofDescription, ProofURI, Deadline } from "../codegen/Tables.sol";
 import { CommitmentStatus } from "../codegen/Types.sol";
 
 contract CommitmentBuilderSystem is System {
+  modifier preActivation(bytes32 id) {
+    require(Commitment.get(id).status == CommitmentStatus.Inactive, "Commitment already active");
+    _;
+  }
+
+  modifier onlyCreator(bytes32 id) {
+    require(Commitment.get(id).owner == _msgSender(), "Not the owner");
+    _;
+  }
 
   function createCommitment(bytes32 id) public {
     Commitment.set(id, CommitmentData({
       owner: _msgSender(),
-      creationTimestamp: block.timestamp,
+      activationTimestamp: 0,
+      status: CommitmentStatus.Inactive
+    }));
+  }
+
+  function addDescription(bytes32 id, string memory desc) public preActivation(id) onlyCreator(id) {
+    TaskDescription.emitEphemeral(id, desc);
+  }
+
+  function addDeadline(bytes32 id, uint32 deadline) public preActivation(id) onlyCreator(id) {
+    require(deadline > block.timestamp, "Deadline must be in the future");
+    Deadline.set(id, deadline);
+  }
+
+  function addSubmissionArtifacts(bytes32 id, string memory proofDescription, string memory uri) public preActivation(id) onlyCreator(id) {
+    ProofURI.set(id, uri);
+    ProofDescription.emitEphemeral(id, proofDescription);
+  }
+
+  function activate(bytes32 id) public onlyCreator(id) {
+    require(Commitment.get(id).status == CommitmentStatus.Inactive, "Commitment already active");
+    Commitment.set(id, CommitmentData({
+      owner: _msgSender(),
+      activationTimestamp: block.timestamp,
       status: CommitmentStatus.Active
     }));
-
-    // Users earn 10 support and attestation tokens for their first commitment
-    bool firstCommitment = FirstCommitment.get(addressToEntity(_msgSender()));
-    if (firstCommitment) {
-      SupportTokens.set(_msgSender(), 10);
-      AttestationTokens.set(_msgSender(), 10);
-    }
   }
-
-  function addDescription(bytes32 entity, string memory desc) public returns (bytes32) {
-    Description.set(entity, desc);
-    return entity;
-  }
-
-  /*function addDeadline(uint32 entity, uint32 deadline) public returns (uint32) {
-    uint32 counter = CommitmentDeadline.set(entity, deadline);
-    return entity;
-  }*/
-
-  /*function addSubmissionUri(uint32 entity, string memory uri) public returns (uint32) {
-    uint32 counter = CommitmentDescription.set(entity, uri);
-    return entity;
-  }*/
 }
