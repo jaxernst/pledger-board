@@ -9,7 +9,7 @@ export const Hud = () => {
   if (!playerEntity) return null;
 
   return (
-    <div className="fixed left-4 top-4 flex items-center gap-3 p-2 text-center text-sm">
+    <div className="flex gap-3 text-center text-sm">
       <div className="rounded-2xl bg-zinc-200 p-2">
         <div className="text-xs ">Player</div>
         {shorthandAddress(playerEntity)}

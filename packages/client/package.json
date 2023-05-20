@@ -22,15 +22,18 @@
     "@latticexyz/std-client": "2.0.0-alpha.1.169+9e98a81c",
     "@latticexyz/utils": "2.0.0-alpha.1.169+9e98a81c",
     "@latticexyz/world": "2.0.0-alpha.1.169+9e98a81c",
+    "@tailwindui/react": "^0.1.1",
     "@wagmi/chains": "^0.2.22",
     "contracts": "workspace:*",
     "ethers": "^5.7.2",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-modal": "^3.16.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "@types/react-modal": "^3.16.0",
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.14",
     "eslint-plugin-react": "7.31.11",

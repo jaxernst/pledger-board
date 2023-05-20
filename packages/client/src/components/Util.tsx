@@ -1,43 +1,16 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
+import { Transition } from "@tailwindui/react";
 
 type CenteredInPageProps = {
   children: ReactNode;
   klass?: string;
 };
 
-export function CenteredInPage({ children, klass }: CenteredInPageProps) {
-  return (
-    <div className={"flex h-screen items-center justify-center " + klass}>
-      <div className="flex h-[600px] w-[600px] flex-col gap-5 rounded-2xl">
-        {children}
-      </div>
-    </div>
-  );
-}
-
 export function WelcomeMessage() {
   return (
     <h1 className="p-2 text-center text-xl font-bold text-zinc-700">
       welcome to soco
     </h1>
-  );
-}
-
-export function DescriptionInput({
-  onInput,
-}: {
-  onInput: (v: string) => void;
-}) {
-  return (
-    <div className="flex items-center gap-2">
-      <input
-        className="w-full rounded-2xl border-2 border-stone-600 bg-cyan-200 p-3 text-zinc-700"
-        type="text"
-        placeholder="I commit to..."
-        onInput={(e) => onInput(e.currentTarget.value)}
-      />
-      <div></div>
-    </div>
   );
 }
 
@@ -92,5 +65,48 @@ export function SubmitButton({ children, onSubmit, klass }: SubmitButtonProps) {
     >
       {children}
     </button>
+  );
+}
+
+type ActionButtonProps = {
+  children: ReactNode;
+  onClick: () => void;
+  klass?: string;
+};
+
+export function ActionButton({ children, onClick, klass }: ActionButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className={
+        "rounded-xl border-2 border-violet-700 bg-zinc-100 text-center text-violet-800 shadow-lg " +
+          klass ?? ""
+      }
+    >
+      {children}
+    </button>
+  );
+}
+
+export function Collapsible({
+  isOpen,
+  children,
+}: {
+  isOpen: boolean;
+  children: ReactNode;
+}) {
+  const slideTransition = {
+    enter: "transform transition ease-in-out duration-300",
+    enterFrom: "-translate-x-full",
+    enterTo: "translate-x-0",
+    leave: "transform transition ease-in-out duration-300",
+    leaveFrom: "translate-x-0",
+    leaveTo: "-translate-x-full",
+  };
+
+  return (
+    <Transition show={isOpen} {...slideTransition}>
+      {children}
+    </Transition>
   );
 }
