@@ -3,64 +3,58 @@ import { Has, HasValue } from "@latticexyz/recs";
 import { useMUD } from "./MUDContext";
 import { CommitmentBuilder } from "./components/CommitmentBuilder";
 import { CommitmentCard } from "./components/CommitmentCard";
-import { Hud } from "./components/Hud";
+import { AccountStatus } from "./components/AccountStatus";
 import { ActionButton, Collapsible } from "./components/Util";
 import { BottomControls } from "./components/BottonControls";
 import { useState } from "react";
 import { CommitmentStatus } from "./types";
+import { ProgressBoard } from "./components/ProgressBoard";
+import { Dialog } from "@headlessui/react";
 
 export const App = () => {
   const {
-    components: { Commitment, Description },
+    components: { Commitment, TaskDescription },
   } = useMUD();
 
   const [showBuilder, setShowBuilder] = useState(false);
-
-  const activeIds = useEntityQuery([
-    HasValue(Commitment, { status: CommitmentStatus.Active }),
-    Has(Description),
-  ]);
-
-  const completedIds = useEntityQuery([
-    HasValue(Commitment, { status: CommitmentStatus.Complete }),
-    Has(Description),
-  ]);
-
+  const a = useEntityQuery([Has(Commitment)]);
+  console.log("a", a);
   return (
-    <>
-      <div className="fixed left-4 top-4 z-50 flex flex-col gap-4 opacity-95">
-        <Hud />
-        <Collapsible isOpen={showBuilder}>
-          <div className="rounded-xl bg-slate-200 p-4">
+    <div className="flex h-full flex-col justify-center">
+      <div className=" px-4 pt-2">
+        <AccountStatus />
+      </div>
+
+      <Dialog
+        open={showBuilder}
+        onClose={() => setShowBuilder(false)}
+        className="absolute left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-zinc-200 bg-opacity-80 p-2"
+      >
+        <Dialog.Panel>
+          <Dialog.Title className="text-lg font-bold text-zinc-800">
+            Create a Commitment
+          </Dialog.Title>
+          <div className="px-2">
             <CommitmentBuilder onCreated={() => setShowBuilder(false)} />
           </div>
-        </Collapsible>
+        </Dialog.Panel>
+      </Dialog>
+
+      <div className="flex flex-grow flex-col px-4 py-2">
+        <div className="rounded-t-xl bg-slate-700 p-2 text-center font-bold text-zinc-200">
+          Commitment Progression Board
+        </div>
+        <ProgressBoard />
+        <div className="rounded-b-xl bg-slate-700 p-2 font-bold text-zinc-200">
+          Total Commitments: 13
+        </div>
       </div>
 
       <BottomControls>
-        <ActionButton klass="p-2" onClick={() => setShowBuilder(!showBuilder)}>
+        <ActionButton klass="p-1" onClick={() => setShowBuilder(!showBuilder)}>
           {showBuilder ? "Close Builder" : "Build Commitment"}
         </ActionButton>
       </BottomControls>
-
-      <div className="absolute left-[50%] top-[50%] flex w-[80%] -translate-x-[50%] -translate-y-[50%]">
-        <div className="flex-grow">
-          <h2 className="text-lg font-bold">Active Commitments</h2>
-          <div className="flex flex-wrap gap-2">
-            {activeIds.map((id) => (
-              <CommitmentCard key={id} id={id} />
-            ))}
-          </div>
-        </div>
-        <div>
-          <h2 className="text-lg font-bold">Completed Commitments</h2>
-          <div className="flex flex-wrap gap-2">
-            {completedIds.map((id) => (
-              <CommitmentCard key={id} id={id} />
-            ))}
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };

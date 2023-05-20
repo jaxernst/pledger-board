@@ -18,17 +18,19 @@ export function createSystemCalls(
 ) {
   const createCommitment = async (
     description: string,
-    adons?: [keyof IWorld, Parameters<typeof worldSend>][]
+    deadline: number,
+    photoProofDescription: string
   ) => {
-    const id = createEntity(world, [[Commitment, { value: true }]]);
+    const id = createEntity(world);
     await worldSend("createCommitment", [stringToBytes32(id)]);
     await worldSend("addDescription", [stringToBytes32(id), description]);
-    console.log("created commitment with id", id);
+    await worldSend("addDeadline", [stringToBytes32(id), deadline]);
+    await worldSend("addPhotoSubmissionRequirement", [
+      stringToBytes32(id),
+      photoProofDescription,
+    ]);
 
-    for (const adon of adons ?? []) {
-      await worldSend(...adon);
-    }
-
+    await worldSend("activate", [stringToBytes32(id)]);
     return id;
   };
 

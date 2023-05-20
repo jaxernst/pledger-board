@@ -10,12 +10,12 @@ import { SubmitButton } from "./Util";
 
 export const CommitmentCard = ({ id }: { id: Entity }) => {
   const {
-    components: { Description, Commitment },
+    components: { TaskDescription, Commitment },
     systemCalls: { markComplete },
     network: { playerEntity },
   } = useMUD();
 
-  const description = getComponentValueStrict(Description, id).value;
+  const description = getComponentValueStrict(TaskDescription, id).value;
   const commitment = getComponentValueStrict(Commitment, id);
 
   const isActive = commitment.status === CommitmentStatus.Active;
@@ -42,7 +42,7 @@ export const CommitmentCard = ({ id }: { id: Entity }) => {
         <div className="w-min whitespace-nowrap text-xs">
           <span className="font-bold">Created:</span>{" "}
           {new Date(
-            Number(commitment.creationTimestamp) * 1000
+            Number(commitment.activationTimestamp) * 1000
           ).toLocaleString()}
         </div>
         <div className=" text-zinc-500">{description}</div>

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
+    "@headlessui/react": "^1.7.14",
     "@latticexyz/common": "2.0.0-alpha.1.169+9e98a81c",
     "@latticexyz/dev-tools": "2.0.0-alpha.1.169+9e98a81c",
     "@latticexyz/network": "2.0.0-alpha.1.169+9e98a81c",

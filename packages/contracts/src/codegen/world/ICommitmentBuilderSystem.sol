@@ -10,7 +10,7 @@ interface ICommitmentBuilderSystem {
 
   function addDeadline(bytes32 id, uint32 deadline) external;
 
-  function addSubmissionArtifacts(bytes32 id, string memory proofDescription, string memory uri) external;
+  function addPhotoSubmissionRequirement(bytes32 id, string memory proofDescription) external;
 
   function activate(bytes32 id) external;
 }

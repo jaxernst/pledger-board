@@ -11,8 +11,23 @@ export function defineContractComponents(world: World) {
         world,
         {
           owner: RecsType.String,
-          creationTimestamp: RecsType.BigInt,
+          activationTimestamp: RecsType.BigInt,
           status: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    TaskDescription: (() => {
+      const tableId = new TableId("", "TaskDescription");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
         },
         {
           metadata: {
@@ -28,21 +43,6 @@ export function defineContractComponents(world: World) {
         world,
         {
           value: RecsType.Boolean,
-        },
-        {
-          metadata: {
-            contractId: tableId.toHexString(),
-            tableId: tableId.toString(),
-          },
-        }
-      );
-    })(),
-    Description: (() => {
-      const tableId = new TableId("", "Description");
-      return defineComponent(
-        world,
-        {
-          value: RecsType.String,
         },
         {
           metadata: {
@@ -82,8 +82,39 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    SupportTokens: (() => {
-      const tableId = new TableId("", "SupportTokens");
+    ProofSubmission: (() => {
+      const tableId = new TableId("", "ProofSubmission");
+      return defineComponent(
+        world,
+        {
+          uri: RecsType.String,
+          submissionTime: RecsType.BigInt,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    ProofDescription: (() => {
+      const tableId = new TableId("", "ProofDescription");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    Ratings: (() => {
+      const tableId = new TableId("", "Ratings");
       return defineComponent(
         world,
         {
@@ -97,8 +128,23 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    AttestationTokens: (() => {
-      const tableId = new TableId("", "AttestationToken");
+    Attestations: (() => {
+      const tableId = new TableId("", "Attestations");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Boolean,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    Reputation: (() => {
+      const tableId = new TableId("", "Reputation");
       return defineComponent(
         world,
         {

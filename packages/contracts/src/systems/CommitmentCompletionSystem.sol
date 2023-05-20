@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Commitment, CommitmentData, ProofRequirement, Deadline, ProofURI } from "../codegen/Tables.sol";
+import { Commitment, CommitmentData, ProofRequirement, Deadline, ProofSubmission, ProofSubmissionData } from "../codegen/Tables.sol";
 import { CommitmentStatus, ProofType } from "../codegen/Types.sol";
 
 contract CommitmentCompletionSystem is System {
@@ -41,7 +41,11 @@ contract CommitmentCompletionSystem is System {
       return;
     }
 
-    ProofURI.set(id, proofUri);
+    ProofSubmission.set(id, ProofSubmissionData({
+      uri: proofUri,
+      submissionTime: block.timestamp
+    }));
+
     commitment.status = CommitmentStatus.Complete;
     Commitment.set(id, commitment);
   }

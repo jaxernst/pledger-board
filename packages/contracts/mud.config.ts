@@ -24,7 +24,12 @@ export default mudConfig({
     FirstCommitment: "bool",
     Deadline: "uint32",
     ProofRequirement: "ProofType",
-    ProofURI: "string",
+    ProofSubmission: {
+      schema: {
+        uri: "string",
+        submissionTime: "uint256",
+      },
+    },
 
     ProofDescription: {
       schema: "string",

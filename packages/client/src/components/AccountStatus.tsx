@@ -1,7 +1,7 @@
 import { useMUD } from "../MUDContext";
 import { shorthandAddress } from "../lib/util";
 
-export const Hud = () => {
+export const AccountStatus = () => {
   const {
     network: { playerEntity },
   } = useMUD();
@@ -9,18 +9,14 @@ export const Hud = () => {
   if (!playerEntity) return null;
 
   return (
-    <div className="flex gap-3 text-center text-sm">
+    <div className="flex gap-2 bg-transparent text-center text-sm text-zinc-700 ">
       <div className="rounded-2xl bg-zinc-200 p-2">
         <div className="text-xs ">Player</div>
         {shorthandAddress(playerEntity)}
       </div>
       <div className="rounded-2xl bg-zinc-200 p-2">
-        <div className="text-xs">Sponsor Credits</div>
-        10
-      </div>
-      <div className="rounded-2xl bg-zinc-200 p-2">
-        <div className="text-xs">Attest Credits</div>
-        10
+        <div className="text-xs">Reputation Credits</div>
+        550
       </div>
     </div>
   );
