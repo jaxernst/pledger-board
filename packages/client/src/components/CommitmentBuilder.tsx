@@ -3,7 +3,7 @@ import { useMUD } from "../MUDContext";
 import { AutoColumn, AutoRow, SubmitButton } from "./Util";
 
 const inputStyle =
-  "rounded-2xl border-2 border-stone-600 bg-cyan-500 p-3 text-zinc-900 placeholder-gray-900";
+  "rounded-2xl border-2 border-stone-600 bg-transparent p-3 text-violet-400 placeholder-violet-400";
 
 function DescriptionInput({
   placeholder,
@@ -92,8 +92,8 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
           onInput={(e) => setCAD(e.currentTarget.value)}
         />
       </div>
-      <div className="mt-4">
-        <SubmitButton onSubmit={create} klass="w-full p-2">
+      <div className="mt-4 flex justify-end">
+        <SubmitButton onSubmit={create} klass="p-2">
           Post Commitment
         </SubmitButton>
       </div>

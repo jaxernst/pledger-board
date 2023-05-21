@@ -2,9 +2,8 @@ import { mudConfig } from "@latticexyz/world/register";
 
 export default mudConfig({
   enums: {
-    CommitmentStatus: ["Inactive", "Active", "Complete", "Failed"],
+    CommitmentStatus: ["Inactive", "Active", "Complete", "Finalized", "Failed"],
     ProofType: ["None", "Photo"],
-    ProgressionZone: ["Rating", "Sponsorhip", "Attestation"],
   },
   tables: {
     Commitment: {
@@ -29,6 +28,7 @@ export default mudConfig({
     ProofDescription: {
       schema: "string",
     },
+    RatingSum: "uint32",
     Ratings: {
       keySchema: {
         commitmentId: "bytes32",
@@ -36,6 +36,8 @@ export default mudConfig({
       },
       schema: "uint8",
     },
+    AttestationPeriod: "uint32",
+    AttestationValue: "uint32",
     Attestations: {
       keySchema: {
         commitmentId: "bytes32",

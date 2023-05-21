@@ -23,6 +23,12 @@ export function createSystemCalls(
       photoProofDescription,
     ]);
 
+    const curTime = new Date().getTime() / 1000;
+    const attestationDuration = Math.floor((deadline - curTime) / 2);
+    await worldSend("makeAttestable", [
+      stringToBytes32(id),
+      attestationDuration,
+    ]);
     await worldSend("activate", [stringToBytes32(id)]);
     return id;
   };
@@ -37,9 +43,24 @@ export function createSystemCalls(
     await worldSend("completeWithProof", [id, uri]);
   };
 
+  const rateCommitment = async (id: Entity, rating: number) => {
+    await worldSend("rate", [id, rating]);
+  };
+
+  const attestToProof = async (id: Entity) => {
+    await worldSend("attestToProof", [id]);
+  };
+
+  const finalize = async (id: Entity) => {
+    await worldSend("finalize", [id]);
+  };
+
   return {
     createCommitment,
     markComplete,
     completeWithProof,
+    rateCommitment,
+    attestToProof,
+    finalize,
   };
 }

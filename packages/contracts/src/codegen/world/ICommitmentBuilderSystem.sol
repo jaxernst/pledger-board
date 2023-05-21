@@ -12,5 +12,7 @@ interface ICommitmentBuilderSystem {
 
   function addPhotoSubmissionRequirement(bytes32 id, string memory proofDescription) external;
 
+  function makeAttestable(bytes32 id, uint32 attestionPeriodDuration) external;
+
   function activate(bytes32 id) external;
 }

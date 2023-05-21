@@ -113,8 +113,53 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
+    RatingSum: (() => {
+      const tableId = new TableId("", "RatingSum");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
     Ratings: (() => {
       const tableId = new TableId("", "Ratings");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    AttestationPeriod: (() => {
+      const tableId = new TableId("", "AttestationPerio");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.Number,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    AttestationValue: (() => {
+      const tableId = new TableId("", "AttestationValue");
       return defineComponent(
         world,
         {

@@ -7,4 +7,6 @@ interface ICommitmentCompletionSystem {
   function markComplete(bytes32 id) external;
 
   function completeWithProof(bytes32 id, string memory proofUri) external;
+
+  function finalize(bytes32 id) external;
 }

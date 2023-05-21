@@ -6,16 +6,11 @@ enum CommitmentStatus {
   Inactive,
   Active,
   Complete,
+  Finalized,
   Failed
 }
 
 enum ProofType {
   None,
   Photo
-}
-
-enum ProgressionZone {
-  Rating,
-  Sponsorhip,
-  Attestation
 }

@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Commitment, Deadline, Ratings, Attestations, Reputation, ProofSubmission } from "../codegen/Tables.sol";
+import { Commitment, Deadline, Ratings, Attestations, AttestationPeriod, AttestationValue, Reputation, ProofSubmission, ProofSubmissionData } from "../codegen/Tables.sol";
 import { CommitmentStatus, ProofType } from "../codegen/Types.sol";
 
 function isStringEmpty(string memory str) pure returns (bool) {
@@ -15,18 +15,18 @@ function isStringEmpty(string memory str) pure returns (bool) {
 contract CommitmentAttestationSystem is System {
   function attestToProof(bytes32 id) public {
     uint8 senderRating = Ratings.get(id, _msgSender());
+    uint submissionTime = ProofSubmission.get(id).submissionTime;
+
     require(Commitment.get(id).status == CommitmentStatus.Complete, "Commitment not complete");
-    require(!isStringEmpty(ProofSubmission.get(id).uri), "No proof submitted");
+    require(submissionTime != 0, "No proof submitted");
     require(senderRating > 0, "Sender has not rated commitment");
+    require(Attestations.get(id, _msgSender()) == false, "Sender already attested");
+ 
+    bool inAttestationPeriod = block.timestamp - submissionTime < AttestationPeriod.get(id);
+    require(inAttestationPeriod, "Attestation period has ended");
 
+    uint32 attestationValue = AttestationValue.get(id);
+    AttestationValue.set(id, attestationValue + senderRating);
     Attestations.set(id, _msgSender(), true);
-
-    address owner = Commitment.get(id).owner;
-    uint32 ownerRep = Reputation.get(owner);
-    uint32 senderRep = Reputation.get(_msgSender());
-   
-    Reputation.set(owner, ownerRep + senderRating);
-    Reputation.set(_msgSender(), senderRep + 1);
   }
-
 }

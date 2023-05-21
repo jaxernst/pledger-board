@@ -18,6 +18,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
 
   const blockTime = (useObservableValue(clock.time$) || 0) / 1000;
   console.log(blockTime);
+
   const qualifiedCommitments = [
     Has(Commitment),
     HasValue(ProofRequirement, { value: 1 }),
@@ -34,8 +35,14 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
   });
 
   const attestionZoneCommitments = useEntityQuery([
-    Has(Commitment),
+    ...qualifiedCommitments,
+    HasValue(Commitment, { status: CommitmentStatus.Complete }),
     Has(ProofSubmission),
+  ]);
+
+  const finalizedCommitments = useEntityQuery([
+    ...qualifiedCommitments,
+    HasValue(Commitment, { status: CommitmentStatus.Finalized }),
   ]);
 
   const failedCommitments = useEntityQuery([
@@ -75,7 +82,11 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
           Completed Commitments
         </div>
         <div className={ColBody}>
-          <div className="flex flex-wrap justify-center gap-2 p-2"></div>
+          <div className="flex flex-wrap justify-center gap-2 p-2">
+            {finalizedCommitments.map((id) => (
+              <CommitmentCard key={id} id={id} zone="finalized" />
+            ))}
+          </div>
         </div>
       </div>
       <div className={ZoneContainerCol}>
