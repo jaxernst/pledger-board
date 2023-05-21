@@ -20,15 +20,7 @@ export const App = () => {
   const a = useEntityQuery([Has(Commitment)]);
   console.log("a", a);
   return (
-    <div className="flex h-full flex-col justify-center">
-      <div className="flex h-12 justify-between px-4 pt-2 ">
-        <AccountStatus />
-
-        <ActionButton klass="p-1" onClick={() => setShowBuilder(!showBuilder)}>
-          {showBuilder ? "Close Builder" : "Build Commitment"}
-        </ActionButton>
-      </div>
-
+    <>
       <Dialog
         open={showBuilder}
         onClose={() => setShowBuilder(false)}
@@ -43,10 +35,33 @@ export const App = () => {
           </div>
         </Dialog.Panel>
       </Dialog>
+      <div className="flex h-full flex-col justify-center">
+        <div className=" flex h-14 justify-between">
+          <div className="fixed left-4 top-2">
+            <AccountStatus />
+          </div>
 
-      <div className="mt-3 flex flex-grow flex-col">
-        <ProgressBoard />
+          <ActionButton
+            klass="p-1 text-sm fixed top-4 right-4"
+            onClick={() => setShowBuilder(!showBuilder)}
+          >
+            {showBuilder ? "Close Builder" : "Build Commitment"}
+          </ActionButton>
+        </div>
+
+        <div className="my-2 flex-grow">
+          <ProgressBoard klass="h-[80vh] overflow-auto rounded-2xl" />
+        </div>
+
+        <div className="fixed bottom-0 mt-3 flex flex-col">
+          {/*<div className="flex gap-6 p-2 text-zinc-200">
+            Reputation Leaderboard
+            <div>1. jernst.eth</div>
+            <div>2. digital-journey.eth</div>
+            <div>3. digital-journey.eth</div>
+  </div> */}
+        </div>
       </div>
-    </div>
+    </>
   );
 };

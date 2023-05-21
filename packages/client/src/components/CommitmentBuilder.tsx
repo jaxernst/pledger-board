@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useMUD } from "../MUDContext";
 import { AutoColumn, AutoRow, SubmitButton } from "./Util";
 
+const inputStyle =
+  "rounded-2xl border-2 border-stone-600 bg-cyan-500 p-3 text-zinc-900 placeholder-gray-900";
+
 function DescriptionInput({
   placeholder,
   onInput,
@@ -58,7 +61,7 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
       proveable with a photo evidence. This is a public commitment and will be
       viewable and ratable by anyone.
       <input
-        className="w-full rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
+        className={inputStyle}
         type="text"
         placeholder="Describe what you are committing to..."
         value={description}
@@ -67,12 +70,12 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
       When will you complete this commitment by?
       <div className="flex gap-2">
         <input
-          className="rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
+          className={inputStyle}
           type="date"
           onInput={(e) => setDeadlineDate(e.currentTarget.value)}
         />
         <input
-          className="rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
+          className={inputStyle}
           type="time"
           onInput={(e) => setDeadlineTime(e.currentTarget.value)}
         />
@@ -83,7 +86,7 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
           attest to the photo proof you submit before the deadline.
         </div>
         <input
-          className="rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
+          className={inputStyle}
           type="text"
           placeholder="Describe the photo proof you will submit"
           onInput={(e) => setCAD(e.currentTarget.value)}

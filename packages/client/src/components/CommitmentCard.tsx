@@ -11,7 +11,13 @@ import { SubmitButton } from "./Util";
 import { useObservableValue } from "@latticexyz/react";
 import { useState } from "react";
 
-export const CommitmentCard = ({ id }: { id: Entity }) => {
+export const CommitmentCard = ({
+  id,
+  zone,
+}: {
+  id: Entity;
+  zone: "rating" | "attesting" | "complete" | "failed";
+}) => {
   const {
     components: { TaskDescription, Commitment, Deadline, ProofDescription },
     systemCalls: { completeWithProof },
@@ -40,42 +46,29 @@ export const CommitmentCard = ({ id }: { id: Entity }) => {
         className="min-w flex flex-col gap-2 rounded-xl border-2 border-zinc-500 p-2"
         key={id}
       >
-        <div className="flex flex-col items-center justify-between gap-2">
-          <div
-            className={`w-full whitespace-nowrap rounded-lg px-2 ${
-              isActive ? "bg-green-400" : "bg-zinc-400"
-            }`}
-          >
-            {deadline - blockTime > 0 ? (
-              <>
-                <span className="py-1 text-zinc-800">Due in </span>{" "}
-                {timeToDeadline}
-              </>
-            ) : (
-              <div>Deadline passed</div>
-            )}
+        <div className="flex items-center justify-between gap-2">
+          <div className="w-min whitespace-nowrap rounded-lg bg-zinc-200 px-2 font-bold text-violet-600">
+            Creator: {shorthandAddress(commitment.owner)}
           </div>
-
-          <div className="flex justify-between gap-2">
-            <div className="w-min whitespace-nowrap rounded-lg bg-zinc-200 px-2">
-              Creator: {shorthandAddress(commitment.owner)}
-            </div>
-            <div className="w-min whitespace-nowrap rounded-lg bg-zinc-200 px-2">
-              Rep: {0}
-            </div>
+          <div className="w-min whitespace-nowrap rounded-lg  px-2">
+            Rep: {0}
           </div>
         </div>
 
         <div>
-          <div className="text-left text-xs font-bold text-zinc-600">
-            Commitment
-          </div>
           <div className=" text-zinc-500">{description}</div>
         </div>
 
-        <div>
-          <div className="text-left text-xs font-bold text-zinc-600">
-            Photo Proof Description
+        {deadline - blockTime > 0 ? (
+          <div className=" self-start whitespace-nowrap rounded-lg text-xs text-green-500">
+            <span className="text-left font-bold text-zinc-600">Due in: </span>{" "}
+            {timeToDeadline}
+          </div>
+        ) : null}
+
+        <div className="flex gap-2 text-left text-xs text-zinc-600">
+          <div className=" font-bold text-zinc-600">
+            Photo Proof Description:
           </div>
           <div className=" text-zinc-500">{photoDescription}</div>
         </div>
@@ -93,16 +86,36 @@ export const CommitmentCard = ({ id }: { id: Entity }) => {
               <div className="flex-grow" />
             )}
 
-            <button
-              onClick={() =>
-                uriInput
-                  ? completeWithProof(id, uriInput)
-                  : setShowUriInput(!showUriInput)
-              }
-              className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-violet-700 p-1 text-center text-white shadow-lg "
-            >
-              Submit Proof of Completion
-            </button>
+            <div className="flex items-center justify-between gap-2">
+              {zone === "rating" ? (
+                <button
+                  onClick={() =>
+                    uriInput
+                      ? completeWithProof(id, uriInput)
+                      : setShowUriInput(!showUriInput)
+                  }
+                  className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-violet-700 p-1 text-center text-white "
+                >
+                  Submit Proof of Completion
+                </button>
+              ) : zone === "attesting" ? (
+                <>
+                  <div className="text-xs text-green-500">
+                    Accepting Attestations
+                  </div>
+                  <button
+                    onClick={() =>
+                      uriInput
+                        ? completeWithProof(id, uriInput)
+                        : setShowUriInput(!showUriInput)
+                    }
+                    className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 text-center text-white"
+                  >
+                    Mark Complete
+                  </button>
+                </>
+              ) : null}
+            </div>
           </div>
         )}
       </div>

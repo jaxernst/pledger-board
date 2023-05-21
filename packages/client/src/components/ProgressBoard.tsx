@@ -4,10 +4,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { CommitmentStatus } from "../types";
 import { CommitmentCard } from "./CommitmentCard";
 
-const ZoneContainerCol = "w-[700px] flex-shrink-0 text-center flex flex-col";
-const CommitmentContainerCol = "flex-grow flex gap-2 p-2";
+const ZoneContainerCol =
+  "w-[700px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
+const ColBody = "bg-indigo-100 overflow-auto";
 
-export const ProgressBoard = () => {
+export const ProgressBoard = ({ klass }: { klass: string }) => {
   const {
     components: { Commitment, ProofRequirement, Deadline, ProofSubmission },
     network: {
@@ -46,13 +47,13 @@ export const ProgressBoard = () => {
   });
 
   return (
-    <div className="scrollbar-transparent flex flex-grow overflow-auto">
+    <div className={`flex flex-grow ${klass}`}>
       <div className={ZoneContainerCol}>
         <div className=" bg-blue-400 font-bold text-zinc-700">Rating Zone</div>
-        <div className="flex-grow bg-blue-50 ">
+        <div className={ColBody}>
           <div className="flex flex-wrap justify-center gap-2 p-2">
             {ratingZoneCommitments.map((id) => (
-              <CommitmentCard key={id} id={id} />
+              <CommitmentCard key={id} id={id} zone="rating" />
             ))}
           </div>
         </div>
@@ -61,10 +62,10 @@ export const ProgressBoard = () => {
         <div className="bg-violet-400 font-bold text-zinc-700">
           Attestation Zone
         </div>
-        <div className="flex-grow bg-blue-50 ">
+        <div className={ColBody}>
           <div className="flex flex-wrap justify-center gap-2 p-2">
             {attestionZoneCommitments.map((id) => (
-              <CommitmentCard key={id} id={id} />
+              <CommitmentCard key={id} id={id} zone="attesting" />
             ))}
           </div>
         </div>
@@ -73,7 +74,7 @@ export const ProgressBoard = () => {
         <div className=" bg-green-500 font-bold text-zinc-700">
           Completed Commitments
         </div>
-        <div className="flex-grow bg-blue-50 ">
+        <div className={ColBody}>
           <div className="flex flex-wrap justify-center gap-2 p-2"></div>
         </div>
       </div>
@@ -81,10 +82,10 @@ export const ProgressBoard = () => {
         <div className=" bg-orange-400 font-bold text-zinc-700">
           Missed Deadline Commitments
         </div>
-        <div className="flex-grow bg-blue-50 ">
+        <div className={ColBody}>
           <div className="flex flex-wrap justify-center gap-2 p-2">
             {failedCommitments.map((id) => (
-              <CommitmentCard key={id} id={id} />
+              <CommitmentCard key={id} id={id} zone="complete" />
             ))}
           </div>
         </div>
