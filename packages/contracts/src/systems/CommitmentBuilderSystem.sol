@@ -27,7 +27,7 @@ contract CommitmentBuilderSystem is System {
   }
 
   function addDescription(bytes32 id, string memory desc) public preActivation(id) onlyCreator(id) {
-    TaskDescription.emitEphemeral(id, desc);
+    TaskDescription.set(id, desc);
   }
 
   function addDeadline(bytes32 id, uint32 deadline) public preActivation(id) onlyCreator(id) {
@@ -37,7 +37,7 @@ contract CommitmentBuilderSystem is System {
 
   function addPhotoSubmissionRequirement(bytes32 id, string memory proofDescription) public preActivation(id) onlyCreator(id) {
     ProofRequirement.set(id, ProofType.Photo);
-    ProofDescription.emitEphemeral(id, proofDescription);
+    ProofDescription.set(id, proofDescription);
   }
 
   function activate(bytes32 id) public onlyCreator(id) {

@@ -87,8 +87,8 @@ export function defineContractComponents(world: World) {
       return defineComponent(
         world,
         {
-          uri: RecsType.String,
           submissionTime: RecsType.BigInt,
+          uri: RecsType.String,
         },
         {
           metadata: {

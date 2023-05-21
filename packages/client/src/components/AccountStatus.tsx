@@ -9,13 +9,13 @@ export const AccountStatus = () => {
   if (!playerEntity) return null;
 
   return (
-    <div className="flex gap-2 bg-transparent text-center text-sm text-zinc-700 ">
-      <div className="rounded-2xl bg-zinc-200 p-2">
-        <div className="text-xs ">Player</div>
+    <div className="flex gap-2 bg-transparent text-center text-sm text-zinc-200 ">
+      <div className="rounded-2xl p-1 px-3 font-bold">
+        <div className="text-xs font-bold text-violet-600">Player</div>
         {shorthandAddress(playerEntity)}
       </div>
-      <div className="rounded-2xl bg-zinc-200 p-2">
-        <div className="text-xs">Reputation Credits</div>
+      <div className="rounded-2xl p-1 px-3 font-bold">
+        <div className="text-xs  text-violet-600">Reputation</div>
         550
       </div>
     </div>

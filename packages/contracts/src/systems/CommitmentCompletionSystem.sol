@@ -42,8 +42,8 @@ contract CommitmentCompletionSystem is System {
     }
 
     ProofSubmission.set(id, ProofSubmissionData({
-      uri: proofUri,
-      submissionTime: block.timestamp
+      submissionTime: block.timestamp,
+      uri: proofUri
     }));
 
     commitment.status = CommitmentStatus.Complete;

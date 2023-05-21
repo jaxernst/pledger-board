@@ -1,20 +1,13 @@
-import {
-  Entity,
-  Has,
-  createEntity,
-  getComponentValue,
-  runQuery,
-} from "@latticexyz/recs";
-import { awaitStreamValue, stringToBytes32 } from "@latticexyz/utils";
-import { ClientComponents } from "./createClientComponents";
+import { Entity, createEntity } from "@latticexyz/recs";
+import { stringToBytes32 } from "@latticexyz/utils";
 import { SetupNetworkResult } from "./setupNetwork";
-import { IWorld } from "contracts/types/ethers-contracts/IWorld";
+import { ClientComponents } from "./createClientComponents";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
 export function createSystemCalls(
-  { worldSend, txReduced$, singletonEntity, world }: SetupNetworkResult,
-  { Commitment }: ClientComponents
+  { worldSend, world }: SetupNetworkResult,
+  components: ClientComponents
 ) {
   const createCommitment = async (
     description: string,
@@ -40,8 +33,13 @@ export function createSystemCalls(
     await worldSend("markComplete", [id]);
   };
 
+  const completeWithProof = async (id: Entity, uri: string) => {
+    await worldSend("completeWithProof", [id, uri]);
+  };
+
   return {
     createCommitment,
     markComplete,
+    completeWithProof,
   };
 }

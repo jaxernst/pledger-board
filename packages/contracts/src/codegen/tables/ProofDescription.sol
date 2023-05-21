@@ -65,24 +65,122 @@ library ProofDescription {
     _store.setMetadata(_tableId, _tableName, _fieldNames);
   }
 
-  /** Emit the ephemeral event using individual values */
-  function emitEphemeral(bytes32 key, string memory value) internal {
-    bytes memory _data = encode(value);
-
+  /** Get value */
+  function get(bytes32 key) internal view returns (string memory value) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    StoreSwitch.emitEphemeralRecord(_tableId, _keyTuple, _data);
+    bytes memory _blob = StoreSwitch.getField(_tableId, _keyTuple, 0);
+    return (string(_blob));
   }
 
-  /** Emit the ephemeral event using individual values (using the specified store) */
-  function emitEphemeral(IStore _store, bytes32 key, string memory value) internal {
-    bytes memory _data = encode(value);
-
+  /** Get value (using the specified store) */
+  function get(IStore _store, bytes32 key) internal view returns (string memory value) {
     bytes32[] memory _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
 
-    _store.emitEphemeralRecord(_tableId, _keyTuple, _data);
+    bytes memory _blob = _store.getField(_tableId, _keyTuple, 0);
+    return (string(_blob));
+  }
+
+  /** Set value */
+  function set(bytes32 key, string memory value) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.setField(_tableId, _keyTuple, 0, bytes((value)));
+  }
+
+  /** Set value (using the specified store) */
+  function set(IStore _store, bytes32 key, string memory value) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.setField(_tableId, _keyTuple, 0, bytes((value)));
+  }
+
+  /** Get the length of value */
+  function length(bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    uint256 _byteLength = StoreSwitch.getFieldLength(_tableId, _keyTuple, 0, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get the length of value (using the specified store) */
+  function length(IStore _store, bytes32 key) internal view returns (uint256) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    uint256 _byteLength = _store.getFieldLength(_tableId, _keyTuple, 0, getSchema());
+    return _byteLength / 1;
+  }
+
+  /** Get an item of value (unchecked, returns invalid data if index overflows) */
+  function getItem(bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = StoreSwitch.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Get an item of value (using the specified store) (unchecked, returns invalid data if index overflows) */
+  function getItem(IStore _store, bytes32 key, uint256 _index) internal view returns (string memory) {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    bytes memory _blob = _store.getFieldSlice(_tableId, _keyTuple, 0, getSchema(), _index * 1, (_index + 1) * 1);
+    return (string(_blob));
+  }
+
+  /** Push a slice to value */
+  function push(bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.pushToField(_tableId, _keyTuple, 0, bytes((_slice)));
+  }
+
+  /** Push a slice to value (using the specified store) */
+  function push(IStore _store, bytes32 key, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.pushToField(_tableId, _keyTuple, 0, bytes((_slice)));
+  }
+
+  /** Pop a slice from value */
+  function pop(bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.popFromField(_tableId, _keyTuple, 0, 1);
+  }
+
+  /** Pop a slice from value (using the specified store) */
+  function pop(IStore _store, bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.popFromField(_tableId, _keyTuple, 0, 1);
+  }
+
+  /** Update a slice of value at `_index` */
+  function update(bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.updateInField(_tableId, _keyTuple, 0, _index * 1, bytes((_slice)));
+  }
+
+  /** Update a slice of value (using the specified store) at `_index` */
+  function update(IStore _store, bytes32 key, uint256 _index, string memory _slice) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.updateInField(_tableId, _keyTuple, 0, _index * 1, bytes((_slice)));
   }
 
   /** Tightly pack full data using this table's schema */
@@ -98,5 +196,21 @@ library ProofDescription {
   function encodeKeyTuple(bytes32 key) internal pure returns (bytes32[] memory _keyTuple) {
     _keyTuple = new bytes32[](1);
     _keyTuple[0] = bytes32((key));
+  }
+
+  /* Delete all data for given keys */
+  function deleteRecord(bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    StoreSwitch.deleteRecord(_tableId, _keyTuple);
+  }
+
+  /* Delete all data for given keys (using the specified store) */
+  function deleteRecord(IStore _store, bytes32 key) internal {
+    bytes32[] memory _keyTuple = new bytes32[](1);
+    _keyTuple[0] = bytes32((key));
+
+    _store.deleteRecord(_tableId, _keyTuple);
   }
 }

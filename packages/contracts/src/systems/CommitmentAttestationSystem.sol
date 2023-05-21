@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 import { getUniqueEntity } from "@latticexyz/world/src/modules/uniqueentity/getUniqueEntity.sol";
 import { System } from "@latticexyz/world/src/System.sol";
-import { Commitment, CommitmentData, Deadline, Ratings, Attestations, Reputation, ProofSubmission } from "../codegen/Tables.sol";
+import { Commitment, Deadline, Ratings, Attestations, Reputation, ProofSubmission } from "../codegen/Tables.sol";
 import { CommitmentStatus, ProofType } from "../codegen/Types.sol";
 
 function isStringEmpty(string memory str) pure returns (bool) {

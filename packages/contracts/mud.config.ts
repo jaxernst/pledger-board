@@ -14,28 +14,21 @@ export default mudConfig({
         status: "CommitmentStatus",
       },
     },
-
     TaskDescription: {
-      // Description is emmitted as an event
       schema: "string",
-      ephemeral: true,
     },
-
     FirstCommitment: "bool",
     Deadline: "uint32",
     ProofRequirement: "ProofType",
     ProofSubmission: {
       schema: {
-        uri: "string",
         submissionTime: "uint256",
+        uri: "string",
       },
     },
-
     ProofDescription: {
       schema: "string",
-      ephemeral: true,
     },
-
     Ratings: {
       keySchema: {
         commitmentId: "bytes32",
@@ -43,7 +36,6 @@ export default mudConfig({
       },
       schema: "uint8",
     },
-
     Attestations: {
       keySchema: {
         commitmentId: "bytes32",
@@ -51,7 +43,6 @@ export default mudConfig({
       },
       schema: "bool",
     },
-
     Reputation: {
       keySchema: {
         account: "address",

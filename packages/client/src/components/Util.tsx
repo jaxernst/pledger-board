@@ -79,7 +79,7 @@ export function ActionButton({ children, onClick, klass }: ActionButtonProps) {
     <button
       onClick={onClick}
       className={
-        "rounded-xl border-2 border-violet-700 bg-zinc-100 text-center text-violet-800 shadow-lg " +
+        "rounded-xl border-2 border-violet-700 bg-zinc-200 px-2 text-center font-bold text-violet-800 shadow-lg " +
           klass ?? ""
       }
     >

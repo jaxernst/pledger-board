@@ -20,7 +20,7 @@ function DescriptionInput({
   return (
     <div className="flex items-center gap-2">
       <input
-        className="w-full rounded-2xl border-2 border-stone-600 bg-cyan-200 p-3 text-zinc-700"
+        className="w-full rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-700"
         type="text"
         placeholder="I commit to..."
         value={description}
@@ -39,48 +39,51 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
 
   const [description, setDescription] = useState("");
 
-  const [deadline, setDeadline] = useState(0);
-  const onDeadlineInput = (dateVal: string) => {
-    const date = new Date(dateVal);
-    setDeadline(Math.floor(date.getTime() / 1000));
-  };
+  const [deadlineDate, setDeadlineDate] = useState("");
+  const [deadlineTime, setDeadlineTime] = useState("");
 
   const [completationArfictDescription, setCAD] = useState("");
 
   const create = () => {
+    const date = new Date(`${deadlineDate} ${deadlineTime}`);
+    const deadline = date.getTime() / 1000;
+    console.log(deadline);
     createCommitment(description, deadline, completationArfictDescription);
     onCreated();
   };
 
   return (
-    <div className="flex flex-col gap-3 py-2">
+    <div className="flex flex-col gap-3 py-2 text-zinc-100">
       Describe your commitment below. A good commitment should be specific, and
       proveable with a photo evidence. This is a public commitment and will be
       viewable and ratable by anyone.
       <input
-        className="w-full rounded-2xl border-2 border-stone-600 bg-cyan-200 p-3 text-zinc-700"
+        className="w-full rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
         type="text"
         placeholder="Describe what you are committing to..."
         value={description}
         onInput={(e) => setDescription(e.currentTarget.value)}
       />
       When will you complete this commitment by?
-      <input
-        className="rounded-2xl border-2 border-stone-600 bg-cyan-200 p-3 text-zinc-700"
-        type="date"
-        onInput={(e) => onDeadlineInput(e.currentTarget.value)}
-      />
-      <div className="my-1 flex flex-col gap-1">
+      <div className="flex gap-2">
+        <input
+          className="rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
+          type="date"
+          onInput={(e) => setDeadlineDate(e.currentTarget.value)}
+        />
+        <input
+          className="rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
+          type="time"
+          onInput={(e) => setDeadlineTime(e.currentTarget.value)}
+        />
+      </div>
+      <div className="my-2 flex flex-col gap-2">
         <div>
-          In order for your commitment to earn you reputation, community members
-          must attest to the photo proof you submit before the deadline.
-        </div>
-        <div>
-          Describe the photo you will submit to prove you completed your
-          commitment
+          In order earn reputation from this commitment, community members must
+          attest to the photo proof you submit before the deadline.
         </div>
         <input
-          className="rounded-2xl border-2 border-stone-600 bg-cyan-200 p-3 text-zinc-700"
+          className="rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-400"
           type="text"
           placeholder="Describe the photo proof you will submit"
           onInput={(e) => setCAD(e.currentTarget.value)}
@@ -88,7 +91,7 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
       </div>
       <div className="mt-4">
         <SubmitButton onSubmit={create} klass="w-full p-2">
-          Generate Commitment
+          Post Commitment
         </SubmitButton>
       </div>
     </div>
