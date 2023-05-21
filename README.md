@@ -1,5 +1,5 @@
 # Pledger Board
-A fully on chain game that making high achievement fun.
+A fully on chain game built to make high achievement fun.
 
 Pledger Board is built around the core principle of making positive commitments in public spaces. 
 The game allows users to make commitments to themselves, follow through with their commitments, and earn 
