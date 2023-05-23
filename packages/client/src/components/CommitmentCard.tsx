@@ -273,7 +273,9 @@ export const CommitmentCard = ({
 
   const blockTime = (useObservableValue(clock.time$) || 0) / 1000;
 
-  const commitment = getComponentValueStrict(Commitment, id);
+  const commitment = getComponentValue(Commitment, id);
+  if (!commitment) return null;
+
   const creationDate = new Date(Number(commitment.activationTimestamp) * 1000);
   const description = getComponentValue(TaskDescription, id)?.value ?? "";
   const photoDescription = getComponentValue(ProofDescription, id)?.value ?? "";
