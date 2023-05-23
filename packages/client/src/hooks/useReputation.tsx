@@ -16,21 +16,22 @@ export function useReputation() {
       rep.length === 1 &&
       rep[0].key.account.toLowerCase() === playerEntity?.toLowerCase()
     ) {
-      setMyRep(Number(rep[0].value));
+      setMyRep(Number(rep[0].value.value));
     }
   }, [rep, playerEntity]);
 
   const sorted = useMemo(
     () =>
       rep.sort((a, b) => {
+        console.log(a);
         if (
           a.key.account.toLowerCase() === playerEntity?.toLowerCase() &&
-          Number(a.value) !== playerRep
+          Number(a.value.value) !== playerRep
         ) {
-          setMyRep(Number(a.value));
+          setMyRep(Number(a.value.value));
         }
 
-        return Number(a.value) - Number(b.value);
+        return Number(b.value.value) - Number(a.value.value);
       }),
     [rep, playerEntity, playerRep]
   );
