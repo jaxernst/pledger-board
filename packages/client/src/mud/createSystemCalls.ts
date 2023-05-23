@@ -1,16 +1,10 @@
-import { Entity, createEntity } from "@latticexyz/recs";
-import { bytesToString, stringToBytes32 } from "@latticexyz/utils";
+import { Entity } from "@latticexyz/recs";
 import { SetupNetworkResult } from "./setupNetwork";
-import { ClientComponents } from "./createClientComponents";
-import { formatBytes32String, hexZeroPad } from "ethers/lib/utils";
-import { normalizeEntityID } from "@latticexyz/network";
+import { hexZeroPad } from "ethers/lib/utils";
 
 export type SystemCalls = ReturnType<typeof createSystemCalls>;
 
-export function createSystemCalls(
-  { worldSend, world }: SetupNetworkResult,
-  components: ClientComponents
-) {
+export function createSystemCalls({ worldSend }: SetupNetworkResult) {
   const createCommitment = async (
     description: string,
     deadline: number,

@@ -81,7 +81,7 @@ export const App = () => {
         <div>
           <Leaderboard />
           <div className="flex w-full justify-center gap-3 pb-2 text-xs text-zinc-300">
-            <p>Created By Jackson Ernst</p>
+            <p>Created By Jackson Ernst</p>|
             <a
               target="_blank"
               rel="noreferrer"

@@ -11,6 +11,8 @@ import { useObservableValue, useRow, useRows } from "@latticexyz/react";
 import { useState } from "react";
 import { StarRating } from "./StarRating";
 import { hexZeroPad } from "ethers/lib/utils";
+import { FileUpload } from "./FileUpload";
+import { storeImage } from "../lib/uploadImage";
 
 /**
  * If you're reading this, I'm sorry
@@ -49,6 +51,24 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
 
   const [showUriInput, setShowUriInput] = useState(false);
   const [uriInput, setUriInput] = useState("");
+  const [uploadFile, setUploadFile] = useState<File>();
+  const [submitting, setSubmitting] = useState(false);
+
+  const submitCompletion = () => {
+    const upload = async () => {
+      if (!uploadFile) return;
+      return await storeImage(uploadFile);
+    };
+
+    const submit = async (ipfsHash?: string) => {
+      await completeWithProof(id, ipfsHash ? "ipfs/" + ipfsHash : uriInput);
+    };
+
+    setSubmitting(true);
+    upload()
+      .then(submit)
+      .finally(() => setSubmitting(false));
+  };
 
   return (
     <div className={CardBottom}>
@@ -77,11 +97,13 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
           onClick={submitRating}
           className={
             "mt-2 w-min whitespace-nowrap rounded-xl border-2 bg-green-500 p-1 px-2 text-sm font-normal text-zinc-100" +
-            (!canRate ? " opacity-50 " : " ")
+            (!canRate || submitting ? " opacity-50 " : " ")
           }
-          disabled={!canRate}
+          disabled={!canRate || submitting}
         >
-          {isOwnCommitment
+          {submitting
+            ? "Submitting..."
+            : isOwnCommitment
             ? "Can't rate"
             : alreadyRated
             ? "Rating Submitted"
@@ -92,20 +114,34 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
       {commitment.owner === playerEntity && (
         <>
           {showUriInput ? (
-            <input
-              className="flex-grow rounded-xl border-2 border-stone-600 bg-zinc-200 p-1 text-sm text-zinc-700"
-              type="text"
-              placeholder="Enter external link to photo proof..."
-              onInput={(e) => setUriInput((e.target as any).value)}
-            />
+            <>
+              <input
+                className="flex-grow rounded-md border-2 border-dashed border-stone-600 bg-transparent p-1 text-sm text-zinc-700"
+                type="text"
+                placeholder="Enter external link to photo proof..."
+                onInput={(e) => setUriInput((e.target as any).value)}
+              />
+              or
+              <div>
+                <FileUpload onFileSelected={setUploadFile} file={uploadFile} />
+                {uploadFile ? (
+                  <button
+                    className="text-xs"
+                    onClick={() => setUploadFile(undefined)}
+                  >
+                    (cancel)
+                  </button>
+                ) : null}
+              </div>
+            </>
           ) : (
             <div className="flex-grow" />
           )}
           <div className="flex items-center justify-center gap-2">
             <button
               onClick={() =>
-                uriInput
-                  ? completeWithProof(id, uriInput)
+                uriInput || uploadFile
+                  ? submitCompletion()
                   : setShowUriInput(!showUriInput)
               }
               className="whitespace-nowrap rounded-xl border-2 bg-violet-700 p-1 px-2 text-center text-sm text-white "
@@ -148,6 +184,8 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
 
   const attestationDisabled = !playerRatedCommitment || playerAttestedToProof;
 
+  const isNftStorageFile = proof.uri?.startsWith("ipfs/");
+
   return (
     <div className={CardBottom}>
       <div className=" text-xs font-bold text-zinc-600">
@@ -156,17 +194,26 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
           <a
             target="_blank"
             rel="noreferrer"
-            className="text-violet-500 underline"
+            className="flex justify-center text-violet-500 underline"
             href={proof.uri}
           >
-            {proof.uri}
+            {isNftStorageFile ? (
+              <img
+                className="max-h-[300px]"
+                src={"https://nftstorage.link/" + proof.uri}
+              />
+            ) : (
+              proof.uri
+            )}
           </a>
         </div>
       </div>
       <div className="flex items-center justify-between gap-2 pt-2">
         {commitment.owner === playerEntity ? (
           <>
-            <div className="text-xs text-green-500">Accepting Attestations</div>
+            <div className="text-xs text-green-500">
+              Accepting Attestations ({attestations.length} / {ratings.length})
+            </div>
             <button
               onClick={() => finalize(id)}
               className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 text-center text-white"
@@ -262,7 +309,15 @@ export const CommitmentCard = ({
         </div>
 
         <div>
-          <div className=" text-zinc-500">{description}</div>
+          <div
+            className={
+              zone === "failed"
+                ? " text-red-500 line-through"
+                : " text-zinc-500 "
+            }
+          >
+            {description}
+          </div>
         </div>
 
         <div className=" self-start whitespace-nowrap rounded-lg text-xs text-green-500">

@@ -97,7 +97,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
         <div className={ColBody}>
           <div className={CardsContainer}>
             {failedCommitments.map((id) => (
-              <CommitmentCard key={id} id={id} zone="complete" />
+              <CommitmentCard key={id} id={id} zone="failed" />
             ))}
           </div>
         </div>

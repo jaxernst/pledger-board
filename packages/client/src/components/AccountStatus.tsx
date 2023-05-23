@@ -1,9 +1,6 @@
-import { getComponentValue } from "@latticexyz/recs";
 import { useMUD } from "../MUDContext";
 import { shorthandAddress } from "../lib/util";
-import { useTables } from "@latticexyz/dev-tools/src/tables/useTables";
-import { useRows } from "@latticexyz/react";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useReputation } from "../hooks/useReputation";
 
 export const AccountStatus = () => {
@@ -19,9 +16,7 @@ export const AccountStatus = () => {
         (e) => e.key.account.toLowerCase() === playerEntity?.toLowerCase()
       ) + 1 || reputation.length
     );
-  }, [reputation]);
-
-  //const rep = 0;
+  }, [reputation, playerEntity]);
 
   if (!playerEntity) return null;
 
