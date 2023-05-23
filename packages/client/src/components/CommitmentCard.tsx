@@ -46,7 +46,8 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
         r.key.account.toLowerCase() === playerEntity
     ).length === 1;
 
-  const isOwnCommitment = playerEntity === commitment.owner;
+  const isOwnCommitment =
+    playerEntity?.toLowerCase() === commitment.owner.toLowerCase();
   const canRate = !isOwnCommitment && !alreadyRated;
 
   const [showUriInput, setShowUriInput] = useState(false);
@@ -111,7 +112,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
         </button>
       </div>
 
-      {commitment.owner === playerEntity && (
+      {commitment.owner.toLowerCase() === playerEntity && (
         <>
           {showUriInput ? (
             <>
@@ -209,7 +210,7 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
         </div>
       </div>
       <div className="flex items-center justify-between gap-2 pt-2">
-        {commitment.owner === playerEntity ? (
+        {commitment.owner.toLowerCase() === playerEntity ? (
           <>
             <div className="text-xs text-green-500">
               Accepting Attestations ({attestations.length} / {ratings.length})

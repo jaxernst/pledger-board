@@ -1,5 +1,4 @@
 import { NFTStorage, File } from "nft.storage";
-import mime from "mime";
 
 // Paste your NFT.Storage API key into the quotes:
 const NFT_STORAGE_KEY =

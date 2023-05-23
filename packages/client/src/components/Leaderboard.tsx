@@ -25,7 +25,6 @@ const RankCard = ({
 
 export const Leaderboard = () => {
   const { reputation } = useReputation();
-  // duplicate reputation array 10 times
 
   return (
     <div className="no-scrollbar flex items-center gap-1 overflow-x-auto p-2 py-4">
