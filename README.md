@@ -1,11 +1,13 @@
 # Pledger Board
+https://pledger-board.vercel.app/
+
 A fully on chain game built to make high achievement fun.
 
 Pledger Board is built around the core principle of making positive commitments in public spaces. 
 The game allows users to make commitments to themselves, follow through with their commitments, and earn 
 reputation for their high achiement.
 
-Live Demo: https://pledger-board.vercel.app/
+
 
 The goal of the game is to earn Reputation, an in game metric for evaluating achievement. Reputation is earned from other users rating your commitments
 and attesting to you completing your commitments.
