@@ -1,7 +1,7 @@
 # Pledger Board
 https://pledger-board.vercel.app/
 
-A fully onchain game built to make high achievement fun.
+A fully onchain game built to make achieving your goals fun.
 
 Pledger Board is built around the core principle of making positive commitments in public spaces. 
 The game allows users to make commitments to themselves, follow through with their commitments, and earn 
