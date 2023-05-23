@@ -4,7 +4,7 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { CommitmentStatus } from "../types";
 import { CommitmentCard } from "./CommitmentCard";
 import { RingLoader } from "react-spinners";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ColBody = "bg-indigo-100 overflow-auto";
 const CardsContainer =
@@ -63,20 +63,13 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
     attestionZoneCommitments,
   ].every((x) => x.length === 0);
 
-  const ref = useRef();
-  useEffect(() => {
-    if (ref.current && ref.current.width > 400 && !loading) {
-      ref.current.scrollIntoView({ behavior: "smooth", inline: "center" });
-    }
-  }, [ref, loading]);
+  const [tMount, setTMount] = useState(new Date());
+  useEffect(() => setTMount(new Date()), []);
 
   return (
     <>
       <div className={`flex flex-grow ${klass}`}>
-        <div
-          ref={ref}
-          className={ZoneContainerCol + " scroll flex-grow snap-center"}
-        >
+        <div className={ZoneContainerCol + " scroll flex-grow snap-center"}>
           <div className=" bg-blue-400  px-2 font-bold text-zinc-700">
             Rating Zone
           </div>
@@ -129,6 +122,24 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
         <div className="fixed left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4">
           <RingLoader color="#a855f7" />
           <i className=" text-xs font-bold">{"Syncing blockchain data..."}</i>
+          {new Date().getTime() - tMount.getTime() > 6000 ? (
+            <i className=" text-xs font-bold">
+              {"Sorry, this can take a few seconds..."}
+            </i>
+          ) : null}
+          {new Date().getTime() - tMount.getTime() > 10000 ? (
+            <i className=" text-xs font-bold">
+              {"This will become much faster soon..."}
+            </i>
+          ) : null}
+          {new Date().getTime() - tMount.getTime() > 15000 ? (
+            <i className=" text-xs font-bold">
+              {"I appreciate your patience..."}
+            </i>
+          ) : null}
+          {new Date().getTime() - tMount.getTime() > 20000 ? (
+            <i className=" text-xs font-bold">{"I seriously do..."}</i>
+          ) : null}
         </div>
       ) : null}
     </>
