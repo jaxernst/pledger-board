@@ -1,19 +1,6 @@
 import React, { ReactNode, useState } from "react";
 import { Transition } from "@tailwindui/react";
 
-type CenteredInPageProps = {
-  children: ReactNode;
-  klass?: string;
-};
-
-export function WelcomeMessage() {
-  return (
-    <h1 className="p-2 text-center text-xl font-bold text-zinc-700">
-      welcome to soco
-    </h1>
-  );
-}
-
 type AutoColumnProps = {
   children: ReactNode;
 };
@@ -52,16 +39,26 @@ type SubmitButtonProps = {
   children: ReactNode;
   onSubmit: () => void;
   klass?: string;
+  disabled?: boolean;
 };
 
-export function SubmitButton({ children, onSubmit, klass }: SubmitButtonProps) {
+export function SubmitButton({
+  children,
+  onSubmit,
+  klass,
+  disabled,
+}: SubmitButtonProps) {
+  const classExtension = ` ${klass ? klass : ""} ${
+    disabled ? "opacity-50" : ""
+  } `;
   return (
     <button
       onClick={onSubmit}
       className={
-        "rounded-xl border-2 border-zinc-700 bg-violet-700 text-center text-white shadow-lg " +
-          klass ?? ""
+        "rounded-xl border-2 border-zinc-700 bg-violet-500 text-center text-white shadow-lg " +
+        classExtension
       }
+      disabled={disabled}
     >
       {children}
     </button>
@@ -79,7 +76,7 @@ export function ActionButton({ children, onClick, klass }: ActionButtonProps) {
     <button
       onClick={onClick}
       className={
-        "rounded-xl border-2 border-violet-700 bg-zinc-200 px-2 text-center font-bold text-violet-800 shadow-lg " +
+        "rounded-xl border-2 border-violet-700 px-2 text-center font-bold text-zinc-200 shadow-lg " +
           klass ?? ""
       }
     >

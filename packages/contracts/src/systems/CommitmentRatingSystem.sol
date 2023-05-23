@@ -15,7 +15,7 @@ contract CommitmentRatingSystem is System {
   // has submitted proof of completion
   function rate(bytes32 id, uint8 rating) public {
     CommitmentData memory commitment = Commitment.get(id);
-    // require(commitment.owner != _msgSender(), "Owner cannot rate");
+    require(commitment.owner != _msgSender(), "Owner cannot rate");
     require(Deadline.get(id) > block.timestamp, "Deadline passed");
     require(isStringEmpty(ProofSubmission.get(id).uri), "Rating period closed");
     require(Ratings.get(id, _msgSender()) == 0, "Already rate this commitment");

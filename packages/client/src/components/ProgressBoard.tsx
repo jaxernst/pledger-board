@@ -4,9 +4,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { CommitmentStatus } from "../types";
 import { CommitmentCard } from "./CommitmentCard";
 
+const ColBody = "bg-indigo-100 overflow-auto";
+const CardsContainer =
+  "flex flex-wrap items-start justify-center gap-2 p-2 flex-row-reverse";
 const ZoneContainerCol =
   "w-[700px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
-const ColBody = "bg-indigo-100 overflow-auto";
 
 export const ProgressBoard = ({ klass }: { klass: string }) => {
   const {
@@ -17,7 +19,6 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
   } = useMUD();
 
   const blockTime = (useObservableValue(clock.time$) || 0) / 1000;
-  console.log(blockTime);
 
   const qualifiedCommitments = [
     Has(Commitment),
@@ -58,7 +59,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
       <div className={ZoneContainerCol}>
         <div className=" bg-blue-400 font-bold text-zinc-700">Rating Zone</div>
         <div className={ColBody}>
-          <div className="flex flex-wrap justify-center gap-2 p-2">
+          <div className={CardsContainer}>
             {ratingZoneCommitments.map((id) => (
               <CommitmentCard key={id} id={id} zone="rating" />
             ))}
@@ -70,7 +71,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
           Attestation Zone
         </div>
         <div className={ColBody}>
-          <div className="flex flex-wrap justify-center gap-2 p-2">
+          <div className={CardsContainer}>
             {attestionZoneCommitments.map((id) => (
               <CommitmentCard key={id} id={id} zone="attesting" />
             ))}
@@ -79,10 +80,10 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
       </div>
       <div className={ZoneContainerCol}>
         <div className=" bg-green-500 font-bold text-zinc-700">
-          Completed Commitments
+          Completion Zone
         </div>
         <div className={ColBody}>
-          <div className="flex flex-wrap justify-center gap-2 p-2">
+          <div className={CardsContainer}>
             {finalizedCommitments.map((id) => (
               <CommitmentCard key={id} id={id} zone="finalized" />
             ))}
@@ -91,10 +92,10 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
       </div>
       <div className={ZoneContainerCol}>
         <div className=" bg-orange-400 font-bold text-zinc-700">
-          Missed Deadline Commitments
+          Missed Deadline Zone
         </div>
         <div className={ColBody}>
-          <div className="flex flex-wrap justify-center gap-2 p-2">
+          <div className={CardsContainer}>
             {failedCommitments.map((id) => (
               <CommitmentCard key={id} id={id} zone="complete" />
             ))}

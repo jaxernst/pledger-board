@@ -13,9 +13,7 @@ export default mudConfig({
         status: "CommitmentStatus",
       },
     },
-    TaskDescription: {
-      schema: "string",
-    },
+
     FirstCommitment: "bool",
     Deadline: "uint32",
     ProofRequirement: "ProofType",
@@ -25,9 +23,14 @@ export default mudConfig({
         uri: "string",
       },
     },
+
+    TaskDescription: {
+      schema: "string",
+    },
     ProofDescription: {
       schema: "string",
     },
+
     RatingSum: "uint32",
     Ratings: {
       keySchema: {
@@ -36,6 +39,7 @@ export default mudConfig({
       },
       schema: "uint8",
     },
+
     AttestationPeriod: "uint32",
     AttestationValue: "uint32",
     Attestations: {
@@ -45,6 +49,7 @@ export default mudConfig({
       },
       schema: "bool",
     },
+
     Reputation: {
       keySchema: {
         account: "address",
@@ -52,4 +57,10 @@ export default mudConfig({
       schema: "uint32",
     },
   },
+  modules: [
+    {
+      name: "UniqueEntityModule",
+      root: true,
+    },
+  ],
 });

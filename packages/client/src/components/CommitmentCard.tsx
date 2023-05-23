@@ -2,21 +2,27 @@ import {
   Entity,
   getComponentValue,
   getComponentValueStrict,
+  getEntityComponents,
 } from "@latticexyz/recs";
 import { formatTime } from "../lib/util";
 import { useMUD } from "../MUDContext";
 import { shorthandAddress } from "../lib/util";
-import { CommitmentStatus } from "../types";
-import { SubmitButton } from "./Util";
-import { useObservableValue } from "@latticexyz/react";
+import { useObservableValue, useRow, useRows } from "@latticexyz/react";
 import { useState } from "react";
 import { StarRating } from "./StarRating";
+import { hexZeroPad } from "ethers/lib/utils";
+
+/**
+ * If you're reading this, I'm sorry
+ */
+
+const CardBottom = "flex flex-col gap-1 ";
 
 const RatingZoneView = ({ id }: { id: Entity }) => {
   const {
-    components: { Commitment, Deadline, ProofRequirement },
+    components: { Commitment, Ratings },
     systemCalls: { rateCommitment, completeWithProof },
-    network: { playerEntity },
+    network: { playerEntity, storeCache },
   } = useMUD();
 
   const commitment = getComponentValueStrict(Commitment, id);
@@ -29,12 +35,24 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
     rateCommitment(id, aRating + pRating + oRating);
   };
 
+  const alreadyRated =
+    useRows(storeCache, {
+      table: "Ratings",
+    })?.filter(
+      (r) =>
+        r.key.commitmentId === hexZeroPad(id, 32) &&
+        r.key.account.toLowerCase() === playerEntity
+    ).length === 1;
+
+  const isOwnCommitment = playerEntity === commitment.owner;
+  const canRate = !isOwnCommitment && !alreadyRated;
+
   const [showUriInput, setShowUriInput] = useState(false);
   const [uriInput, setUriInput] = useState("");
 
   return (
-    <div className="flex flex-col gap-1">
-      <div className="text-md gap- my-1 flex flex-col text-sm font-bold text-zinc-700">
+    <div className={CardBottom}>
+      <div className="flex flex-col text-sm font-bold text-zinc-600">
         <div className="flex items-center gap-3">
           <div>Ambition</div>
           <div>
@@ -53,14 +71,22 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
             <StarRating onRatingChanged={(val) => setORating(val)} />
           </div>
         </div>
-        {oRating || pRating || aRating ? (
-          <button
-            onClick={submitRating}
-            className=" my-2 w-min whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 px-2 font-normal text-zinc-100"
-          >
-            Submit Rating
-          </button>
-        ) : null}
+      </div>
+      <div className="flex w-full justify-center">
+        <button
+          onClick={submitRating}
+          className={
+            "mt-2 w-min whitespace-nowrap rounded-xl border-2 bg-green-500 p-1 px-2 text-sm font-normal text-zinc-100" +
+            (!canRate ? " opacity-50 " : " ")
+          }
+          disabled={!canRate}
+        >
+          {isOwnCommitment
+            ? "Can't rate"
+            : alreadyRated
+            ? "Rating Submitted"
+            : "Submit Rating"}
+        </button>
       </div>
 
       {commitment.owner === playerEntity && (
@@ -82,7 +108,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
                   ? completeWithProof(id, uriInput)
                   : setShowUriInput(!showUriInput)
               }
-              className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-violet-700 p-1 text-center text-white "
+              className="whitespace-nowrap rounded-xl border-2 bg-violet-700 p-1 px-2 text-center text-sm text-white "
             >
               Submit Proof of Completion
             </button>
@@ -96,28 +122,48 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
   const {
     components: { Commitment, ProofSubmission },
     systemCalls: { attestToProof, finalize },
-    network: { playerEntity },
+    network: { playerEntity, storeCache },
   } = useMUD();
 
   const commitment = getComponentValueStrict(Commitment, id);
   const proof = getComponentValueStrict(ProofSubmission, id);
 
+  const ratings = useRows(storeCache, { table: "Ratings" }).filter((row) => {
+    return row.key.commitmentId === hexZeroPad(id, 32);
+  });
+
+  const playerRatedCommitment =
+    ratings.filter((row) => row.key.account.toLowerCase() === playerEntity)
+      .length === 1;
+
+  const attestations = useRows(storeCache, {
+    table: "Attestations",
+  }).filter((row) => {
+    return row.key.commitmentId === hexZeroPad(id, 32);
+  });
+
+  const playerAttestedToProof =
+    attestations.filter((row) => row.key.account.toLowerCase() === playerEntity)
+      .length === 1;
+
+  const attestationDisabled = !playerRatedCommitment || playerAttestedToProof;
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className={CardBottom}>
       <div className=" text-xs font-bold text-zinc-600">
         Proof Of Completion
         <div className="w-full rounded-xl  bg-zinc-300 p-2">
           <a
             target="_blank"
             rel="noreferrer"
-            className="text-violet-600 underline"
+            className="text-violet-500 underline"
             href={proof.uri}
           >
             {proof.uri}
           </a>
         </div>
       </div>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 pt-2">
         {commitment.owner === playerEntity ? (
           <>
             <div className="text-xs text-green-500">Accepting Attestations</div>
@@ -130,12 +176,22 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
           </>
         ) : (
           <>
-            <div className="text-xs text-green-500">Attestions: 0 / 3</div>
+            <div>
+              <div className="text-xs text-green-500">
+                Attestions: {attestations.length} / {ratings.length}
+              </div>
+            </div>
             <button
               onClick={() => attestToProof(id)}
-              className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 text-center text-white"
+              disabled={attestationDisabled}
+              className={
+                "whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 text-center text-sm text-white" +
+                (attestationDisabled ? " opacity-50" : "")
+              }
             >
-              Attest to Proof
+              {playerAttestedToProof
+                ? "Attestion Received!"
+                : "Attest to Proof"}
             </button>
           </>
         )}
@@ -159,10 +215,10 @@ export const CommitmentCard = ({
       ProofDescription,
       RatingSum,
       AttestationValue,
+      AttestationPeriod,
+      ProofSubmission,
     },
-    systemCalls: { completeWithProof, rateCommitment },
     network: {
-      playerEntity,
       network: { clock },
     },
   } = useMUD();
@@ -170,10 +226,18 @@ export const CommitmentCard = ({
   const blockTime = (useObservableValue(clock.time$) || 0) / 1000;
 
   const commitment = getComponentValueStrict(Commitment, id);
-  const description = getComponentValueStrict(TaskDescription, id).value;
-  const photoDescription = getComponentValueStrict(ProofDescription, id).value;
+  const description = getComponentValue(TaskDescription, id)?.value ?? "";
+  const photoDescription = getComponentValue(ProofDescription, id)?.value ?? "";
   const deadline = getComponentValueStrict(Deadline, id).value;
   const timeToDeadline = formatTime(deadline - blockTime);
+
+  const attestatonPeriod = getComponentValueStrict(AttestationPeriod, id).value;
+  const submissionTime = Number(
+    getComponentValue(ProofSubmission, id)?.submissionTime
+  );
+  const attestationTimeRemaining = submissionTime
+    ? formatTime(submissionTime + attestatonPeriod - blockTime)
+    : 0;
 
   const ratingSum = getComponentValue(RatingSum, id)?.value || 0;
   const attestationValue = getComponentValue(AttestationValue, id)?.value || 0;
@@ -181,11 +245,11 @@ export const CommitmentCard = ({
   return (
     <>
       <div
-        className="min-w flex flex-col gap-2 rounded-xl border-2 border-zinc-500 p-2"
+        className="min-w flex flex-col gap-2 rounded-xl border-2 border-zinc-900 p-2"
         key={id}
       >
         <div className="flex items-center justify-between gap-2">
-          <div className="w-min whitespace-nowrap rounded-lg bg-violet-200 px-2 font-bold text-violet-600">
+          <div className="w-min whitespace-nowrap rounded-lg bg-violet-200 px-2 font-bold text-violet-500">
             Creator: {shorthandAddress(commitment.owner)}
           </div>
           <div className="w-min whitespace-nowrap rounded-lg px-2 text-sm">
@@ -201,12 +265,23 @@ export const CommitmentCard = ({
           <div className=" text-zinc-500">{description}</div>
         </div>
 
-        {deadline - blockTime > 0 ? (
-          <div className=" self-start whitespace-nowrap rounded-lg text-xs text-green-500">
-            <span className="text-left font-bold text-zinc-600">Due in: </span>{" "}
-            {timeToDeadline}
-          </div>
-        ) : null}
+        <div className=" self-start whitespace-nowrap rounded-lg text-xs text-green-500">
+          {zone === "attesting" ? (
+            <>
+              <span className="text-left font-bold text-zinc-600">
+                Attestations Period Over:{" "}
+              </span>{" "}
+              {attestationTimeRemaining}
+            </>
+          ) : deadline - blockTime > 0 ? (
+            <>
+              <span className="text-left font-bold text-zinc-600">
+                Due in:{" "}
+              </span>
+              {timeToDeadline}
+            </>
+          ) : null}
+        </div>
 
         <div className="flex gap-2 text-left text-xs text-zinc-600">
           <div className=" font-bold text-zinc-600">

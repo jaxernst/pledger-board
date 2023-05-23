@@ -22,21 +22,6 @@ export function defineContractComponents(world: World) {
         }
       );
     })(),
-    TaskDescription: (() => {
-      const tableId = new TableId("", "TaskDescription");
-      return defineComponent(
-        world,
-        {
-          value: RecsType.String,
-        },
-        {
-          metadata: {
-            contractId: tableId.toHexString(),
-            tableId: tableId.toString(),
-          },
-        }
-      );
-    })(),
     FirstCommitment: (() => {
       const tableId = new TableId("", "FirstCommitment");
       return defineComponent(
@@ -89,6 +74,21 @@ export function defineContractComponents(world: World) {
         {
           submissionTime: RecsType.BigInt,
           uri: RecsType.String,
+        },
+        {
+          metadata: {
+            contractId: tableId.toHexString(),
+            tableId: tableId.toString(),
+          },
+        }
+      );
+    })(),
+    TaskDescription: (() => {
+      const tableId = new TableId("", "TaskDescription");
+      return defineComponent(
+        world,
+        {
+          value: RecsType.String,
         },
         {
           metadata: {

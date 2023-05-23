@@ -1,3 +1,4 @@
+import { NetworkSummary } from "@latticexyz/dev-tools/src/summary/NetworkSummary";
 import { createClientComponents } from "./createClientComponents";
 import { createSystemCalls } from "./createSystemCalls";
 import { setupNetwork } from "./setupNetwork";
@@ -8,6 +9,7 @@ export async function setup() {
   const network = await setupNetwork();
   const components = createClientComponents(network);
   const systemCalls = createSystemCalls(network, components);
+
   return {
     network,
     components,

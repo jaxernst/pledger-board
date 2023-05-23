@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useMUD } from "../MUDContext";
 import { AutoColumn, AutoRow, SubmitButton } from "./Util";
 
 const inputStyle =
-  "rounded-2xl border-2 border-stone-600 bg-transparent p-3 text-violet-400 placeholder-violet-400";
+  "rounded-2xl border-2 border-stone-600 bg-transparent p-3 text-violet-500 placeholder-violet-500";
 
 function DescriptionInput({
   placeholder,
@@ -47,6 +47,15 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
 
   const [completationArfictDescription, setCAD] = useState("");
 
+  const [inputError, showInputError] = useState("false");
+
+  const deadlineValid = useMemo(() => {
+    if (!deadlineDate) return false;
+    const deadline = new Date(`${deadlineDate} ${deadlineTime}`);
+    const curDate = new Date();
+    return deadline > curDate;
+  }, [deadlineDate, deadlineTime]);
+
   const create = () => {
     const date = new Date(`${deadlineDate} ${deadlineTime}`);
     const deadline = date.getTime() / 1000;
@@ -63,12 +72,12 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
       <input
         className={inputStyle}
         type="text"
-        placeholder="Describe what you are committing to..."
+        placeholder="Describe the goal or task you will complete..."
         value={description}
         onInput={(e) => setDescription(e.currentTarget.value)}
       />
       When will you complete this commitment by?
-      <div className="flex gap-2">
+      <div className="flex items-center gap-2">
         <input
           className={inputStyle}
           type="date"
@@ -79,6 +88,9 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
           type="time"
           onInput={(e) => setDeadlineTime(e.currentTarget.value)}
         />
+        {deadlineDate && !deadlineValid ? (
+          <div className="text-red-500">Deadline must be in the future</div>
+        ) : null}
       </div>
       <div className="my-2 flex flex-col gap-2">
         <div>
@@ -88,12 +100,18 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
         <input
           className={inputStyle}
           type="text"
-          placeholder="Describe the photo proof you will submit"
+          placeholder="Describe what you will submit to prove completion..."
           onInput={(e) => setCAD(e.currentTarget.value)}
         />
       </div>
-      <div className="mt-4 flex justify-end">
-        <SubmitButton onSubmit={create} klass="p-2">
+      <div className="mt-2 flex justify-end">
+        <SubmitButton
+          onSubmit={create}
+          disabled={
+            !(deadlineValid && description && completationArfictDescription)
+          }
+          klass="p-2"
+        >
           Post Commitment
         </SubmitButton>
       </div>

@@ -18,12 +18,14 @@ contract CommitmentBuilderSystem is System {
     _;
   }
 
-  function createCommitment(bytes32 id) public {
+  function registerCommitment() public returns (bytes32) {
+    bytes32 id = getUniqueEntity();
     Commitment.set(id, CommitmentData({
       owner: _msgSender(),
       activationTimestamp: 0,
       status: CommitmentStatus.Inactive
     }));
+    return id;
   }
 
   function addDescription(bytes32 id, string memory desc) public preActivation(id) onlyCreator(id) {
@@ -51,5 +53,15 @@ contract CommitmentBuilderSystem is System {
       activationTimestamp: block.timestamp,
       status: CommitmentStatus.Active
     }));
+  }
+
+  function registrationHelper(string memory desc, uint32 deadline, string memory proofDescription, uint32 attestionPeriodDuration) public returns (bytes32) {
+    bytes32 commitmentId = registerCommitment();
+    addDescription(commitmentId, desc);
+    addDeadline(commitmentId, deadline);
+    addPhotoSubmissionRequirement(commitmentId, proofDescription);
+    makeAttestable(commitmentId, attestionPeriodDuration);
+    activate(commitmentId);
+    return commitmentId;
   }
 }
