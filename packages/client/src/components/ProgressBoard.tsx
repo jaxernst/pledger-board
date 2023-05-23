@@ -119,7 +119,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
         </div>
       </div>
       {loading ? (
-        <div className="fixed left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4">
+        <div className="fixed left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4 text-center">
           <RingLoader color="#a855f7" />
           <i className=" text-xs font-bold">{"Syncing blockchain data..."}</i>
           {new Date().getTime() - tMount.getTime() > 6000 ? (
@@ -127,17 +127,17 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
               {"Sorry, this can take a few seconds..."}
             </i>
           ) : null}
-          {new Date().getTime() - tMount.getTime() > 10000 ? (
+          {new Date().getTime() - tMount.getTime() > 12000 ? (
             <i className=" text-xs font-bold">
               {"This will become much faster soon..."}
             </i>
           ) : null}
-          {new Date().getTime() - tMount.getTime() > 15000 ? (
+          {new Date().getTime() - tMount.getTime() > 19000 ? (
             <i className=" text-xs font-bold">
               {"I appreciate your patience..."}
             </i>
           ) : null}
-          {new Date().getTime() - tMount.getTime() > 20000 ? (
+          {new Date().getTime() - tMount.getTime() > 26000 ? (
             <i className=" text-xs font-bold">{"I seriously do..."}</i>
           ) : null}
         </div>
