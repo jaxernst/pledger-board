@@ -5,13 +5,14 @@ export const WelcomeMessage = () => {
         Welcome to Pledger - Board
       </h1>
       <i className="text-center">
-        A fully onchain social game built to make high achievement fun.
+        A fully onchain, pseudonymous social game built to make high achievement
+        fun.
       </i>
       <p className="py-4">
         <span className="text-lg font-bold text-violet-500">Goal:</span> Make
         public, proveable commitments to the global commitment board. Submit
         photo proof of yourself completing commitments and earn reputation for
-        your high achievement.{" "}
+        your goals and commitments.{" "}
       </p>
       <div className="flex flex-col gap-2">
         <h2 className="text-lg font-bold text-violet-500">How it works</h2>
