@@ -233,7 +233,7 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
               onClick={() => attestToProof(id)}
               disabled={attestationDisabled}
               className={
-                "whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 text-center text-sm text-white" +
+                "whitespace-nowrap rounded-xl border-2 bg-green-500 p-1 text-center text-sm text-white" +
                 (attestationDisabled ? " opacity-50" : "")
               }
             >
