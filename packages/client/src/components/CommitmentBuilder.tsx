@@ -47,17 +47,17 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
 
   const [completationArfictDescription, setCAD] = useState("");
 
-  const [inputError, showInputError] = useState("false");
-
   const deadlineValid = useMemo(() => {
     if (!deadlineDate) return false;
-    const deadline = new Date(`${deadlineDate} ${deadlineTime}`);
+    const deadline = new Date(
+      `${deadlineDate.replace(/-/g, "/")} ${deadlineTime}`
+    );
     const curDate = new Date();
     return deadline > curDate;
   }, [deadlineDate, deadlineTime]);
 
   const create = () => {
-    const date = new Date(`${deadlineDate} ${deadlineTime}`);
+    const date = new Date(`${deadlineDate.replace(/-/g, "/")} ${deadlineTime}`);
     const deadline = date.getTime() / 1000;
     console.log(deadline);
     createCommitment(description, deadline, completationArfictDescription);

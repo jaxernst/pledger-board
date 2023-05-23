@@ -8,7 +8,7 @@ const ColBody = "bg-indigo-100 overflow-auto";
 const CardsContainer =
   "flex flex-wrap items-start justify-center gap-2 p-2 flex-row-reverse";
 const ZoneContainerCol =
-  "w-[700px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
+  "w-[790px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
 
 export const ProgressBoard = ({ klass }: { klass: string }) => {
   const {

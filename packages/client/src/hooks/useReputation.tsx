@@ -18,7 +18,7 @@ export function useReputation() {
     ) {
       setMyRep(Number(rep[0].value));
     }
-  }, [rep]);
+  }, [rep, playerEntity]);
 
   const sorted = useMemo(
     () =>
@@ -32,11 +32,11 @@ export function useReputation() {
 
         return Number(a.value) - Number(b.value);
       }),
-    [rep, playerEntity]
+    [rep, playerEntity, playerRep]
   );
 
   return {
-    playerRep: 0,
+    playerRep,
     reputation: sorted,
   };
 }

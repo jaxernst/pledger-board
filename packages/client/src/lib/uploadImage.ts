@@ -1,8 +1,7 @@
 import { NFTStorage, File } from "nft.storage";
 
 // Paste your NFT.Storage API key into the quotes:
-const NFT_STORAGE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDhERjk4MzkxMWIxQjhmYWQ1YjFmZjM3QTg5ZUY1M0FlM2M2MWZlRjQiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4NDgxNDY2MzYxMiwibmFtZSI6InBsZWRnZXIifQ.5_2ngo6mxey4W0VkFHGM6EPE4B6-dTnKzN9Dt4dmDWY";
+const NFT_STORAGE_KEY = import.meta.env.VITE_NFT_STORAGE_KEY;
 
 /**
  * Reads an image file from `imagePath` and stores an NFT with the given name and description.

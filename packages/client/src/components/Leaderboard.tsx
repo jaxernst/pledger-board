@@ -27,7 +27,7 @@ export const Leaderboard = () => {
   const { reputation } = useReputation();
 
   return (
-    <div className="no-scrollbar flex items-center gap-1 overflow-x-auto p-2 py-4">
+    <div className="no-scrollbar flex items-center gap-1 overflow-x-auto p-2 py-3">
       <div className="whitespace-nowrap px-2 font-bold text-violet-500">
         Leaderboard
       </div>
@@ -36,7 +36,7 @@ export const Leaderboard = () => {
           <RankCard
             pos={i + 1}
             account={row.key.account}
-            value={Number(row.value.value)}
+            value={Number(row.value.value ?? 0)}
           />
         </div>
       ))}
