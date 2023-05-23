@@ -13,7 +13,7 @@ import { WelcomeMessage } from "./components/WelcomeMessage";
 import { GithubLogo, TwitterLogo } from "./components/SvgLogos";
 
 const DialogStyle =
-  "absolute shadow-xl left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-zinc-900 p-5 bg-opacity-90 backdrop-blur-sm";
+  "absolute shadow-xl left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-zinc-900 p-5 bg-opacity-90 backdrop-blur-sm w-full md:w-auto";
 
 export const App = () => {
   const [showBuilder, setShowBuilder] = useState(false);
@@ -48,9 +48,7 @@ export const App = () => {
           <Dialog.Title className="px-2 py-1 text-center text-xl font-bold text-zinc-200">
             Create a Commitment
           </Dialog.Title>
-          <div className="px-2">
-            <CommitmentBuilder onCreated={() => setShowBuilder(false)} />
-          </div>
+          <CommitmentBuilder onCreated={() => setShowBuilder(false)} />
         </Dialog.Panel>
       </Dialog>
 
