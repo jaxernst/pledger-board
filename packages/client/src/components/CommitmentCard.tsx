@@ -1,7 +1,6 @@
 import {
   Entity,
   getComponentValue,
-  getComponentValueStrict,
   getEntityComponents,
 } from "@latticexyz/recs";
 import { formatTime } from "../lib/util";
@@ -27,7 +26,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
     network: { playerEntity, storeCache },
   } = useMUD();
 
-  const commitment = getComponentValueStrict(Commitment, id);
+  const commitment = getComponentValue(Commitment, id);
 
   const [aRating, setARating] = useState(0);
   const [pRating, setPRating] = useState(0);
@@ -47,7 +46,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
     ).length === 1;
 
   const isOwnCommitment =
-    playerEntity?.toLowerCase() === commitment.owner.toLowerCase();
+    playerEntity?.toLowerCase() === commitment?.owner.toLowerCase();
   const canRate = !isOwnCommitment && !alreadyRated;
 
   const [showUriInput, setShowUriInput] = useState(false);
@@ -71,6 +70,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
       .finally(() => setSubmitting(false));
   };
 
+  if (!commitment) return null;
   return (
     <div className={CardBottom}>
       <div className="flex flex-col text-sm font-bold text-zinc-600">
@@ -162,8 +162,8 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
     network: { playerEntity, storeCache },
   } = useMUD();
 
-  const commitment = getComponentValueStrict(Commitment, id);
-  const proof = getComponentValueStrict(ProofSubmission, id);
+  const commitment = getComponentValue(Commitment, id);
+  const proof = getComponentValue(ProofSubmission, id);
 
   const ratings = useRows(storeCache, { table: "Ratings" }).filter((row) => {
     return row.key.commitmentId === hexZeroPad(id, 32);
@@ -185,7 +185,8 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
 
   const attestationDisabled = !playerRatedCommitment || playerAttestedToProof;
 
-  const isNftStorageFile = proof.uri?.startsWith("ipfs/");
+  const isNftStorageFile = proof?.uri?.startsWith("ipfs/");
+  if (!proof || !commitment) return null;
 
   return (
     <div className={CardBottom}>
@@ -279,10 +280,13 @@ export const CommitmentCard = ({
   const creationDate = new Date(Number(commitment.activationTimestamp) * 1000);
   const description = getComponentValue(TaskDescription, id)?.value ?? "";
   const photoDescription = getComponentValue(ProofDescription, id)?.value ?? "";
-  const deadline = getComponentValueStrict(Deadline, id).value;
+  const deadline =
+    getComponentValue(Deadline, id)?.value ??
+    Math.floor(new Date().getTime() / 1000) + 60 * 60;
   const timeToDeadline = formatTime(deadline - blockTime);
 
-  const attestatonPeriod = getComponentValueStrict(AttestationPeriod, id).value;
+  const attestatonPeriod =
+    getComponentValue(AttestationPeriod, id)?.value ?? 60 * 60 * 24;
   const submissionTime = Number(
     getComponentValue(ProofSubmission, id)?.submissionTime
   );

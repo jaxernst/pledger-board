@@ -1,5 +1,4 @@
 import { useRows } from "@latticexyz/react";
-import { Entity } from "@latticexyz/recs";
 import { useEffect, useMemo, useState } from "react";
 import { useMUD } from "../MUDContext";
 
