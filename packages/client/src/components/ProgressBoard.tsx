@@ -57,7 +57,9 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
   return (
     <div className={`flex flex-grow ${klass}`}>
       <div className={ZoneContainerCol}>
-        <div className=" bg-blue-400 font-bold text-zinc-700">Rating Zone</div>
+        <div className=" bg-blue-400  px-2 font-bold text-zinc-700">
+          Rating Zone
+        </div>
         <div className={ColBody}>
           <div className={CardsContainer}>
             {ratingZoneCommitments.map((id) => (
@@ -67,7 +69,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
         </div>
       </div>
       <div className={ZoneContainerCol}>
-        <div className="bg-violet-400 font-bold text-zinc-700">
+        <div className="bg-violet-400  px-2 font-bold text-zinc-700">
           Attestation Zone
         </div>
         <div className={ColBody}>
@@ -79,7 +81,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
         </div>
       </div>
       <div className={ZoneContainerCol}>
-        <div className=" bg-green-500 font-bold text-zinc-700">
+        <div className=" bg-green-500   px-2 font-bold text-zinc-700">
           Completion Zone
         </div>
         <div className={ColBody}>
@@ -91,7 +93,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
         </div>
       </div>
       <div className={ZoneContainerCol}>
-        <div className=" bg-orange-400 font-bold text-zinc-700">
+        <div className=" bg-orange-400 px-2 font-bold text-zinc-700">
           Missed Deadline Zone
         </div>
         <div className={ColBody}>
