@@ -23,7 +23,6 @@ export function useReputation() {
   const sorted = useMemo(
     () =>
       rep.sort((a, b) => {
-        console.log(a);
         if (
           a.key.account.toLowerCase() === playerEntity?.toLowerCase() &&
           Number(a.value.value) !== playerRep
