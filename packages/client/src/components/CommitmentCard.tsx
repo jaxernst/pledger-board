@@ -9,7 +9,7 @@ import { shorthandAddress } from "../lib/util";
 import { useObservableValue, useRow, useRows } from "@latticexyz/react";
 import { useState } from "react";
 import { StarRating } from "./StarRating";
-import { hexZeroPad } from "ethers/lib/utils";
+import { hexZeroPad, parseBytes32String } from "ethers/lib/utils";
 import { FileUpload } from "./FileUpload";
 import { storeImage } from "../lib/uploadImage";
 
@@ -39,11 +39,12 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
   const alreadyRated =
     useRows(storeCache, {
       table: "Ratings",
-    })?.filter(
-      (r) =>
+    })?.filter((r) => {
+      return (
         r.key.commitmentId === hexZeroPad(id, 32) &&
-        r.key.account.toLowerCase() === playerEntity
-    ).length === 1;
+        r.key.account.toLowerCase() === playerEntity?.toLowerCase()
+      );
+    }).length === 1;
 
   const isOwnCommitment =
     playerEntity?.toLowerCase() === commitment?.owner.toLowerCase();
@@ -119,7 +120,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
               <input
                 className="flex-grow rounded-md border-2 border-dashed border-stone-600 bg-transparent p-1 text-sm text-zinc-700"
                 type="text"
-                placeholder="Enter external link to photo proof..."
+                placeholder="link or written proof here..."
                 onInput={(e) => setUriInput((e.target as any).value)}
               />
               or
@@ -352,7 +353,7 @@ export const CommitmentCard = ({
 
         <div className="inline gap-2 text-left text-xs text-zinc-600">
           <span className=" whitespace-nowrap font-bold">
-            Photo Proof Description:
+            Proof Description:
           </span>
           <span className="px-1 text-green-500">{photoDescription}</span>
         </div>
