@@ -16,10 +16,6 @@ const DialogStyle =
   "absolute shadow-xl left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-zinc-900 p-5 bg-opacity-90 backdrop-blur-sm";
 
 export const App = () => {
-  const {
-    components: { Commitment },
-  } = useMUD();
-
   const [showBuilder, setShowBuilder] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
 
