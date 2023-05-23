@@ -345,10 +345,8 @@ export const CommitmentCard = ({
         </div>
 
         <div className="flex gap-2 text-left text-xs text-zinc-600">
-          <div className=" font-bold text-zinc-600">
-            Photo Proof Description:
-          </div>
-          <div className=" text-zinc-500">{photoDescription}</div>
+          <div className=" font-bold ">Photo Proof Description:</div>
+          <div className=" text-green-500">{photoDescription}</div>
         </div>
 
         {zone === "rating" && <RatingZoneView id={id} />}
