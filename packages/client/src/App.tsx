@@ -47,18 +47,18 @@ export const App = () => {
       </Dialog>
 
       <div className="flex h-full flex-col justify-center">
-        <div className=" grid grid-cols-[1fr] grid-rows-3 items-center justify-between px-2 md:h-14 md:grid-cols-[1fr,auto,1fr] md:grid-rows-1">
-          <div className="justify-self-center md:justify-self-start">
+        <div className=" grid-cols-[1fr, 1fr] grid grid-rows-2 items-center justify-between px-2 md:h-14 md:grid-cols-[1fr,auto,1fr] md:grid-rows-1">
+          <div className="col-span-2 col-start-1 justify-self-center pb-1 md:col-span-1 md:justify-self-start">
             <AccountStatus />
           </div>
 
-          <h1 className="row-start-1 justify-self-center text-lg font-bold text-zinc-100 md:col-start-2">
+          <h1 className="row-start-1 justify-self-start px-2 text-lg font-bold text-zinc-100 md:col-start-2 md:justify-self-center">
             Pledger - Board
           </h1>
 
-          <div className=" flex justify-center gap-2 md:justify-end">
+          <div className="row-start-1 flex justify-center  md:col-start-3 md:justify-end">
             <ActionButton
-              klass="p-1 text-sm justify-self-end"
+              klass="p-1 text-sm justify-self-end whitespace-nowrap"
               onClick={() => setShowBuilder(!showBuilder)}
             >
               {showBuilder ? "Close Builder" : "Build Commitment"}

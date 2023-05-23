@@ -8,7 +8,7 @@ const ColBody = "bg-indigo-100 overflow-auto";
 const CardsContainer =
   "flex flex-wrap items-start justify-center gap-2 p-2 flex-row-reverse";
 const ZoneContainerCol =
-  "max-w-[800px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
+  "max-w-[800px] min-w-[300px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
 
 export const ProgressBoard = ({ klass }: { klass: string }) => {
   const {
@@ -56,7 +56,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
 
   return (
     <div className={`flex flex-grow ${klass}`}>
-      <div className={ZoneContainerCol}>
+      <div className={ZoneContainerCol + " flex-grow"}>
         <div className=" bg-blue-400  px-2 font-bold text-zinc-700">
           Rating Zone
         </div>
