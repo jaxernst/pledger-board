@@ -217,7 +217,7 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
             </div>
             <button
               onClick={() => finalize(id)}
-              className="whitespace-nowrap rounded-xl border-2 border-zinc-700 bg-green-500 p-1 text-center text-white"
+              className="whitespace-nowrap rounded-xl border-2  bg-green-500 p-1 text-center text-white"
             >
               Finalize
             </button>
@@ -274,6 +274,7 @@ export const CommitmentCard = ({
   const blockTime = (useObservableValue(clock.time$) || 0) / 1000;
 
   const commitment = getComponentValueStrict(Commitment, id);
+  const creationDate = new Date(Number(commitment.activationTimestamp) * 1000);
   const description = getComponentValue(TaskDescription, id)?.value ?? "";
   const photoDescription = getComponentValue(ProofDescription, id)?.value ?? "";
   const deadline = getComponentValueStrict(Deadline, id).value;
@@ -321,11 +322,15 @@ export const CommitmentCard = ({
           </div>
         </div>
 
-        <div className=" self-start whitespace-nowrap rounded-lg text-xs text-green-500">
+        <div className="self-start whitespace-nowrap rounded-lg text-xs text-green-500">
+          <span className="text-left font-bold text-zinc-600">Created: </span>
+          {creationDate.toLocaleDateString()}
+        </div>
+        <div className="self-start whitespace-nowrap rounded-lg text-xs text-green-500">
           {zone === "attesting" ? (
             <>
               <span className="text-left font-bold text-zinc-600">
-                Attestations Period Over:{" "}
+                Attestation Period Over:{" "}
               </span>{" "}
               {attestationTimeRemaining}
             </>
