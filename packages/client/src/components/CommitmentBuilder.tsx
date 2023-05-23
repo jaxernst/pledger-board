@@ -59,7 +59,6 @@ export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
   const create = () => {
     const date = new Date(`${deadlineDate.replace(/-/g, "/")} ${deadlineTime}`);
     const deadline = date.getTime() / 1000;
-    console.log(deadline);
     createCommitment(description, deadline, completationArfictDescription);
     onCreated();
   };

@@ -158,13 +158,12 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
 };
 const AttestationZoneView = ({ id }: { id: Entity }) => {
   const {
-    components: { Commitment, ProofSubmission },
+    components: { Commitment },
     systemCalls: { attestToProof, finalize },
     network: { playerEntity, storeCache },
   } = useMUD();
 
   const commitment = getComponentValue(Commitment, id);
-  const proof = getComponentValue(ProofSubmission, id);
 
   const ratings = useRows(storeCache, { table: "Ratings" }).filter((row) => {
     return row.key.commitmentId === hexZeroPad(id, 32);
@@ -186,31 +185,10 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
 
   const attestationDisabled = !playerRatedCommitment || playerAttestedToProof;
 
-  const isNftStorageFile = proof?.uri?.startsWith("ipfs/");
-  if (!proof || !commitment) return null;
+  if (!commitment) return null;
 
   return (
     <div className={CardBottom}>
-      <div className=" text-xs font-bold text-zinc-600">
-        Proof Of Completion
-        <div className="w-full overflow-hidden rounded-xl  bg-zinc-300 p-2">
-          <a
-            target="_blank"
-            rel="noreferrer"
-            className="flex justify-center text-violet-500 underline"
-            href={proof.uri}
-          >
-            {isNftStorageFile ? (
-              <img
-                className="max-h-[300px]"
-                src={"https://nftstorage.link/" + proof.uri}
-              />
-            ) : (
-              proof.uri
-            )}
-          </a>
-        </div>
-      </div>
       <div className="flex items-center justify-between gap-2 pt-2">
         {commitment.owner.toLowerCase() === playerEntity ? (
           <>
@@ -298,6 +276,9 @@ export const CommitmentCard = ({
   const ratingSum = getComponentValue(RatingSum, id)?.value || 0;
   const attestationValue = getComponentValue(AttestationValue, id)?.value || 0;
 
+  const proof = getComponentValue(ProofSubmission, id);
+  const isNftStorageFile = proof?.uri?.startsWith("ipfs/");
+
   return (
     <>
       <div
@@ -357,6 +338,31 @@ export const CommitmentCard = ({
           </span>
           <span className="px-1 text-green-500">{photoDescription}</span>
         </div>
+
+        {proof && (
+          <>
+            <div className=" text-xs font-bold text-zinc-600">
+              Proof Of Completion
+              <div className="w-full overflow-hidden rounded-xl  bg-zinc-300 p-2">
+                <a
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex justify-center text-violet-500 underline"
+                  href={proof.uri}
+                >
+                  {isNftStorageFile ? (
+                    <img
+                      className="max-h-[300px]"
+                      src={"https://nftstorage.link/" + proof.uri}
+                    />
+                  ) : (
+                    proof.uri
+                  )}
+                </a>
+              </div>
+            </div>
+          </>
+        )}
 
         {zone === "rating" && <RatingZoneView id={id} />}
         {zone === "attesting" && <AttestationZoneView id={id} />}
