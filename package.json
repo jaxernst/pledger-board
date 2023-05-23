@@ -22,6 +22,5 @@
     "typescript": "^4.9.5"
   },
   "engines": {
-    "pnpm": "8.x"
   }
 }
