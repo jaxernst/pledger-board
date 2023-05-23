@@ -28,6 +28,14 @@ export const App = () => {
       >
         <Dialog.Panel>
           <WelcomeMessage />
+          <div className="flex w-full justify-center pt-4 md:hidden">
+            <ActionButton
+              klass="py-1 px-3"
+              onClick={() => setShowWelcome(false)}
+            >
+              Enter
+            </ActionButton>
+          </div>
         </Dialog.Panel>
       </Dialog>
 
