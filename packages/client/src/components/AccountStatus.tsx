@@ -17,7 +17,7 @@ export const AccountStatus = () => {
       ) + 1 || reputation.length
     );
   }, [reputation, playerEntity]);
-  console.log(playerRep);
+
   if (!playerEntity) return null;
 
   return (
