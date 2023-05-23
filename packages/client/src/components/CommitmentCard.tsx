@@ -282,7 +282,7 @@ export const CommitmentCard = ({
   return (
     <>
       <div
-        className="min-w flex max-w-[400px] flex-col gap-2 rounded-xl border-2 border-zinc-900 p-2"
+        className="min-w flex max-w-[400px] scale-75 flex-col gap-2 rounded-xl border-2 border-zinc-900 p-2 md:scale-100"
         key={id}
       >
         <div className="flex items-center justify-between gap-2">

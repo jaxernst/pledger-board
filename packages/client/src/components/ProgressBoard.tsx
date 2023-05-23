@@ -8,7 +8,7 @@ import { useEffect, useRef } from "react";
 
 const ColBody = "bg-indigo-100 overflow-auto";
 const CardsContainer =
-  "flex flex-wrap items-start scale-75 sm:scale-100 justify-center gap-2 p-2 flex-row-reverse";
+  "flex flex-wrap items-start sm:scale-100 justify-center gap-2 p-2 flex-row-reverse";
 const ZoneContainerCol =
   "max-w-[800px] min-w-[300px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
 
