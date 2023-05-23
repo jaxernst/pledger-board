@@ -3,37 +3,7 @@ import { useMUD } from "../MUDContext";
 import { AutoColumn, AutoRow, SubmitButton } from "./Util";
 
 const inputStyle =
-  "rounded-2xl border-2 border-stone-600 bg-transparent p-3 text-violet-500 placeholder-violet-500";
-
-function DescriptionInput({
-  placeholder,
-  onInput,
-}: {
-  placeholder: string;
-  onInput: (v: string) => void;
-}) {
-  const [description, setDescription] = useState("");
-
-  const handleInput = (val: string) => {
-    if (!val.startsWith("I commit to")) return;
-    setDescription(val);
-    onInput(val);
-  };
-
-  return (
-    <div className="flex items-center gap-2">
-      <input
-        className="w-full rounded-2xl border-2 border-stone-600 bg-zinc-500 p-3 text-zinc-700"
-        type="text"
-        placeholder="I commit to..."
-        value={description}
-        onInput={(e) => handleInput(e.currentTarget.value)}
-        onFocus={(e) => setDescription("I commit to")}
-      />
-      <div></div>
-    </div>
-  );
-}
+  "rounded-2xl min-w-[100px] border-2 border-stone-600 bg-transparent p-3 text-violet-500 placeholder-violet-500";
 
 export const CommitmentBuilder = ({ onCreated }: { onCreated: () => void }) => {
   const {

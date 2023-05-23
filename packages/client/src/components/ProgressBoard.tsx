@@ -4,10 +4,11 @@ import { useEntityQuery, useObservableValue } from "@latticexyz/react";
 import { CommitmentStatus } from "../types";
 import { CommitmentCard } from "./CommitmentCard";
 import { RingLoader } from "react-spinners";
+import { useEffect, useRef } from "react";
 
 const ColBody = "bg-indigo-100 overflow-auto";
 const CardsContainer =
-  "flex flex-wrap items-start justify-center gap-2 p-2 flex-row-reverse";
+  "flex flex-wrap items-start scale-75 sm:scale-100 justify-center gap-2 p-2 flex-row-reverse";
 const ZoneContainerCol =
   "max-w-[800px] min-w-[300px] flex-shrink-0 text-center grid grid-rows-[auto,1fr]";
 
@@ -62,10 +63,20 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
     attestionZoneCommitments,
   ].every((x) => x.length === 0);
 
+  const ref = useRef();
+  useEffect(() => {
+    if (ref.current && ref.current.width > 400 && !loading) {
+      ref.current.scrollIntoView({ behavior: "smooth", inline: "center" });
+    }
+  }, [ref, loading]);
+
   return (
     <>
       <div className={`flex flex-grow ${klass}`}>
-        <div className={ZoneContainerCol + " scroll flex-grow snap-center"}>
+        <div
+          ref={ref}
+          className={ZoneContainerCol + " scroll flex-grow snap-center"}
+        >
           <div className=" bg-blue-400  px-2 font-bold text-zinc-700">
             Rating Zone
           </div>
@@ -116,7 +127,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
       </div>
       {loading ? (
         <div className="fixed left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-4">
-          <RingLoader color="#8044ca" />
+          <RingLoader color="#a855f7" />
           <i className=" text-xs font-bold">{"Syncing blockchain data..."}</i>
         </div>
       ) : null}
