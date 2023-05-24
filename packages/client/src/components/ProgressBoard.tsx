@@ -127,18 +127,10 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
               {"this can take a few seconds..."}
             </i>
           ) : null}
-          {new Date().getTime() - tMount.getTime() > 19000 ? (
+          {new Date().getTime() - tMount.getTime() > 32000 ? (
             <i className=" text-xs font-bold">
-              {"This will become much faster soon..."}
+              {"this will become much faster soon..."}
             </i>
-          ) : null}
-          {new Date().getTime() - tMount.getTime() > 30000 ? (
-            <i className=" text-xs font-bold">
-              {"I appreciate your patience..."}
-            </i>
-          ) : null}
-          {new Date().getTime() - tMount.getTime() > 42000 ? (
-            <i className=" text-xs font-bold">{"I seriously do..."}</i>
           ) : null}
         </div>
       ) : null}
