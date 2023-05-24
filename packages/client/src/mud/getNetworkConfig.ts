@@ -49,15 +49,11 @@ export async function getNetworkConfig(): Promise<NetworkConfig> {
     },
     privateKey: getBurnerWallet().value,
     chainId,
-    modeUrl: import.meta.env.VITE_PROD
-      ? undefined
-      : params.get("mode") ?? chain.modeUrl,
+    modeUrl: params.get("mode") ?? chain.modeUrl,
     faucetServiceUrl: params.get("faucet") ?? chain.faucetUrl,
     worldAddress,
     initialBlockNumber,
     snapSync: params.get("snapSync") === "true",
-    disableCache: !!(import.meta.env.VITE_PROD
-      ? "true"
-      : params.get("cache") === "false"),
+    disableCache: params.get("cache") === "false",
   };
 }
