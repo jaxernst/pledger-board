@@ -56,13 +56,7 @@ export const ProgressBoard = ({ klass }: { klass: string }) => {
     return blockTime > deadline;
   });
 
-  const loading = [
-    failedCommitments,
-    finalizedCommitments,
-    ratingZoneCommitments,
-    attestionZoneCommitments,
-  ].every((x) => x.length === 0);
-
+  const loading = false;
   const [tMount, setTMount] = useState(new Date());
   useEffect(() => setTMount(new Date()), []);
 

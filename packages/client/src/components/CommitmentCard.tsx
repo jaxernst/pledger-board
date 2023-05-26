@@ -72,6 +72,7 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
   };
 
   if (!commitment) return null;
+
   return (
     <div className={CardBottom}>
       <div className="flex flex-col text-sm font-bold text-zinc-600">
@@ -252,8 +253,8 @@ export const CommitmentCard = ({
   } = useMUD();
 
   const blockTime = (useObservableValue(clock.time$) || 0) / 1000;
-
   const commitment = getComponentValue(Commitment, id);
+
   if (!commitment) return null;
 
   const creationDate = new Date(Number(commitment.activationTimestamp) * 1000);
