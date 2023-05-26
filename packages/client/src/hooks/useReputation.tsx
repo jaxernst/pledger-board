@@ -11,7 +11,7 @@ export function useReputation() {
 
   /** Issue #1
    * The reputation table is returning rows with the expected keys, but the
-   * values not match the values onchain (MUD Dev tools shows the correct values)
+   * values do not match the values onchain (MUD Dev tools shows the correct/expected values)
    */
   const rep = useRows(storeCache, { table: "Reputation" });
   console.log("Reputation table with seemingly missing values", rep);
