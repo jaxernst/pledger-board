@@ -10,7 +10,7 @@ export function useReputation() {
   } = useMUD();
 
   /** Issue #1
-   * The reuptation table is returning rows with the expected keys, but the
+   * The reputation table is returning rows with the expected keys, but the
    * values not match the values onchain (MUD Dev tools shows the correct values)
    */
   const rep = useRows(storeCache, { table: "Reputation" });
