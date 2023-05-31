@@ -9,7 +9,7 @@ import { shorthandAddress } from "../lib/util";
 import { useObservableValue, useRow, useRows } from "@latticexyz/react";
 import { useState } from "react";
 import { StarRating } from "./StarRating";
-import { hexZeroPad, parseBytes32String } from "ethers/lib/utils";
+import { hexZeroPad } from "ethers/lib/utils";
 import { FileUpload } from "./FileUpload";
 import { storeImage } from "../lib/uploadImage";
 
@@ -156,7 +156,13 @@ const RatingZoneView = ({ id }: { id: Entity }) => {
     </div>
   );
 };
-const AttestationZoneView = ({ id }: { id: Entity }) => {
+const AttestationZoneView = ({
+  id,
+  timeRemaining,
+}: {
+  id: Entity;
+  timeRemaining: number;
+}) => {
   const {
     components: { Commitment },
     systemCalls: { attestToProof, finalize },
@@ -183,7 +189,8 @@ const AttestationZoneView = ({ id }: { id: Entity }) => {
     attestations.filter((row) => row.key.account.toLowerCase() === playerEntity)
       .length === 1;
 
-  const attestationDisabled = !playerRatedCommitment || playerAttestedToProof;
+  const attestationDisabled =
+    !playerRatedCommitment || playerAttestedToProof || timeRemaining <= 0;
 
   if (!commitment) return null;
 
@@ -318,9 +325,11 @@ export const CommitmentCard = ({
           {zone === "attesting" ? (
             <>
               <span className="text-left font-bold text-zinc-600">
-                Attestation Period Over:{" "}
+                Attestation Time Remaining:{" "}
               </span>{" "}
-              {attestationTimeRemaining}
+              {Number(attestationTimeRemaining) > 0
+                ? attestationTimeRemaining
+                : 0}
             </>
           ) : deadline - blockTime > 0 ? (
             <>
@@ -365,7 +374,12 @@ export const CommitmentCard = ({
         )}
 
         {zone === "rating" && <RatingZoneView id={id} />}
-        {zone === "attesting" && <AttestationZoneView id={id} />}
+        {zone === "attesting" && (
+          <AttestationZoneView
+            id={id}
+            timeRemaining={Number(attestationTimeRemaining)}
+          />
+        )}
       </div>
     </>
   );
