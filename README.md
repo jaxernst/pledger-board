@@ -1,5 +1,4 @@
 # Pledger Board
-https://pledger-board.vercel.app/
 
 A fully onchain pseudonymous social game built to make achieving your goals fun.
 
